@@ -3,7 +3,7 @@ class Order <ApplicationRecord
 
   has_many :item_orders
   has_many :items, through: :item_orders
-  belongs_to :user
+  belongs_to :address
 
   enum status: %w(packaged pending shipped cancelled)
 
