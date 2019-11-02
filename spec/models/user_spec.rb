@@ -57,5 +57,17 @@ RSpec.describe User, type: :model do
       expect(merchant_admin.titleize_role).to eq('Merchant Admin')
       expect(admin.titleize_role).to eq('Admin')
     end
+
+    it 'can retrieve all of a users orders' do
+      user = User.create!(name: "Gmoney", email: "test@gmail.com", password: "password123", password_confirmation: "password123")
+      address_1 = user.addresses.create!(nickname: 'Home', address: '123 Lincoln St', city: 'Denver', state: 'CO', zip: '23840')
+      address_2 = user.addresses.create!(nickname: 'Work', address: '646 Main St', city: 'Pittsburgh', state: 'PA', zip: '43824')
+
+      order_1 = Order.create!(address_id: address_1.id)
+      order_2 = Order.create!(address_id: address_2.id)
+      order_3 = Order.create!(address_id: address_2.id)
+
+      expect(user.orders).to eq([order_1, order_2, order_3])
+    end
   end
 end
