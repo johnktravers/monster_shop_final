@@ -45,7 +45,7 @@ describe Merchant, type: :model do
       expect(@meg.average_item_price).to eq(65)
     end
 
-    xit 'distinct_cities' do
+    it 'distinct_cities' do
       order_1 = Order.create!(address_id: @address_1.id)
       order_2 = Order.create!(address_id: @address_2.id)
       order_3 = Order.create!(address_id: @address_1.id)
