@@ -11,4 +11,8 @@ class User < ApplicationRecord
   def titleize_role
     role.titleize
   end
+
+  def orders
+    Order.where(address_id: addresses.pluck(:id))
+  end
 end
