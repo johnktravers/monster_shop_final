@@ -11,26 +11,26 @@
     <td>Email</td>
     <td><%= @user.email %></td>
   </tr>
-  <tr>
+  <!-- <tr>
     <td>Address</td>
-    <td><%= @user.address %></td>
+    <td><#%= @user.address %></td>
   </tr>
   <tr>
     <td>City</td>
-    <td><%= @user.city %></td>
+    <td><#%= @user.city %></td>
   </tr>
   <tr>
     <td>State</td>
-    <td><%= @user.state %></td>
+    <td><#%= @user.state %></td>
   </tr>
   <tr>
     <td>Zip</td>
-    <td><%= @user.zip %></td>
-  </tr>
+    <td><#%= @user.zip %></td>
+  </tr> -->
 </table>
 
 <article class="justify-content-center row mt-4">
-  <% if !@user.orders.empty? %>
+  <% if @user.orders.any? %>
     <%= link_to 'Your Orders', user_orders_path, class: 'btn btn-success ml-2 mr-2' %>
   <% end %>
   <% if !admin %>
