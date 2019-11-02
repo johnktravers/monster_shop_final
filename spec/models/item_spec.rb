@@ -31,7 +31,8 @@ describe Item, type: :model do
       @review_3 = @chain.reviews.create(title: "Meh place", content: "They have meh bike stuff and I probably won't come back", rating: 1)
       @review_4 = @chain.reviews.create(title: "Not too impressed", content: "v basic bike shop", rating: 2)
       @review_5 = @chain.reviews.create(title: "Okay place :/", content: "Brian's cool and all but just an okay selection of items", rating: 3)
-      @user = User.create!(name: "Gmoney", address: "123 Lincoln St", city: "Denver", state: "CO", zip: 23840, email: "test@gmail.com", password: "password123", password_confirmation: "password123")
+      @user = User.create!(name: "Gmoney", email: "test@gmail.com", password: "password123", password_confirmation: "password123")
+      @address = @user.addresses.create!(nickname: 'Home', address: '123 Lincoln St', city: 'Denver', state: 'CO', zip: '23840')
     end
 
     it "calculate average review" do
@@ -48,14 +49,14 @@ describe Item, type: :model do
 
     it 'no orders' do
       expect(@chain.no_orders?).to eq(true)
-      order = Order.create(user_id: @user.id)
+      order = Order.create(address_id: @address.id)
       order.item_orders.create(item: @chain, price: @chain.price, quantity: 2)
       expect(@chain.no_orders?).to eq(false)
     end
 
     it 'can find the quantity ordered of an item' do
-      order_1 = Order.create!(user_id: @user.id)
-      order_2 = Order.create!(user_id: @user.id)
+      order_1 = Order.create!(address_id: @address.id)
+      order_2 = Order.create!(address_id: @address.id)
 
       order_1.item_orders.create!(item_id: @chain.id, price: @chain.price, quantity: 7)
       order_2.item_orders.create!(item_id: @chain.id, price: @chain.price, quantity: 3)
@@ -89,15 +90,16 @@ describe Item, type: :model do
       @dog_bone = @brian.items.create(name: "Dog Bone", description: "They'll love it!", price: 21, image: "https://img.chewy.com/is/image/catalog/54226_MAIN._AC_SL1500_V1534449573_.jpg", active?: false, inventory: 21)
       @dog_bowl = @brian.items.create(name: "Dog Bowl", description: "They'll love it!", price: 21, image: "https://img.chewy.com/is/image/catalog/54226_MAIN._AC_SL1500_V1534449573_.jpg", active?: false, inventory: 21)
 
-      @user = User.create!(name: "Gmoney", address: "123 Lincoln St", city: "Denver", state: "CO", zip: 23840, email: "test@gmail.com", password: "password123", password_confirmation: "password123")
-      @order_1 = Order.create!(user_id: @user.id)
+      @user = User.create!(name: "Gmoney", email: "test@gmail.com", password: "password123", password_confirmation: "password123")
+      @address = @user.addresses.create!(nickname: 'Home', address: '123 Lincoln St', city: 'Denver', state: 'CO', zip: '23840')
+      @order = Order.create!(address_id: @address.id)
 
-      @order_1.item_orders.create!(item_id: @chain.id, price: @chain.price, quantity: 7)
-      @order_1.item_orders.create!(item_id: @dog_bowl.id, price: @dog_bowl.price, quantity: 6)
-      @order_1.item_orders.create!(item_id: @tire.id, price: @tire.price, quantity: 5)
-      @order_1.item_orders.create!(item_id: @pull_toy.id, price: @pull_toy.price, quantity: 4)
-      @order_1.item_orders.create!(item_id: @dog_bone.id, price: @dog_bone.price, quantity: 3)
-      @order_1.item_orders.create!(item_id: @helmet.id, price: @helmet.price, quantity: 2)
+      @order.item_orders.create!(item_id: @chain.id, price: @chain.price, quantity: 7)
+      @order.item_orders.create!(item_id: @dog_bowl.id, price: @dog_bowl.price, quantity: 6)
+      @order.item_orders.create!(item_id: @tire.id, price: @tire.price, quantity: 5)
+      @order.item_orders.create!(item_id: @pull_toy.id, price: @pull_toy.price, quantity: 4)
+      @order.item_orders.create!(item_id: @dog_bone.id, price: @dog_bone.price, quantity: 3)
+      @order.item_orders.create!(item_id: @helmet.id, price: @helmet.price, quantity: 2)
     end
 
     it "can return only active items" do
