@@ -1,0 +1,75 @@
+<h1 class="mt-4 mb-4">Create an Order</h1>
+
+<% if !current_admin? %>
+  <table class="table table-striped table-bordered cart-table">
+    <thead>
+      <tr>
+        <th scope="col">Item</th>
+        <th scope="col">Sold By</th>
+        <th scope="col">Price</th>
+        <th scope="col">Quantity</th>
+        <th scope="col">Subtotal</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% cart.items.each do |item, quantity| %>
+        <tr id= "order-item-<%=item.id%>">
+          <th scope="row">
+            <span>
+              <%= image_tag item.image, class: 'cart-image center', align: 'center' %>
+              <%=link_to item.name, "/items/#{item.id}" %>
+            </span>
+          </th>
+          <td><%=link_to item.merchant.name, "/merchants/#{item.merchant.id}"%></td>
+          <td><%=number_to_currency(item.price)%></td>
+          <td><%=quantity%></td>
+          <td><%=number_to_currency(cart.subtotal(item))%></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <h4 class="text-center">Grand Total: <%= number_to_currency(cart.total) %></h4>
+
+  <section class='container-fluid justify-content-center d-flex mt-4'>
+    <p><%= link_to "Edit Cart", "/cart", class: 'btn btn-primary ml-2 mr-2' %></p>
+  </section>
+<% else %>
+  <h3 align="center">You are not authorized to create orders.</h3>
+<% end %>
+
+<hr class="m-4">
+
+<h2 class="text-center m-4">Shipping Info</h2>
+<%= form_tag '/profile/orders' do %>
+  <section class='form-group form-width'>
+    <p>
+      <%= label_tag :nickname %>
+      <%= text_field_tag :nickname, @address.nickname, class: 'form-control', placeholder: 'Home, Work, etc.' %>
+    </p>
+
+    <p>
+      <%= label_tag :address %>
+      <%= text_field_tag :address, @address.address, class: 'form-control' %>
+    </p>
+
+    <p>
+      <%= label_tag :city %>
+      <%= text_field_tag :city, @address.city, class: 'form-control' %>
+    </p>
+
+    <p>
+      <%= label_tag :state %>
+      <%= text_field_tag :state, @address.state, class: 'form-control' %>
+    </p>
+
+    <p>
+      <%= label_tag :zip_code %>
+      <%= text_field_tag :zip, @address.zip, class: 'form-control' %>
+    </p>
+
+    <p class='justify-content-center row'>
+      <%= submit_tag 'Create Order', class: 'btn btn-success mt-2' %>
+    </p>
+  </section>
+<% end %>
