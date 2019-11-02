@@ -34,6 +34,10 @@ describe Order, type: :model do
     it 'total_item_quantity' do
       expect(@order_1.total_item_quantity).to eq(5)
     end
+
+    it 'user' do
+      expect(@order_1.user).to eq(@user)
+    end
   end
 
   describe 'status' do
