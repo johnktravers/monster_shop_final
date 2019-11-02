@@ -29,22 +29,33 @@ class UserOrdersController < ApplicationController
     redirect_to '/profile'
   end
 
+  def new
+    @address = Address.new
+  end
+
   def create
-    order = Order.create(user_id: current_user.id)
-    if cart.contents.any? && order.save
-      cart.items.each do |item,quantity|
-        order.item_orders.create({
-          item: item,
-          quantity: quantity,
-          price: item.price
-          })
+    address = current_user.addresses.new(address_params)
+    if address.save
+      order = address.orders.create!
+      if cart.contents.any? && order.save
+        cart.items.each do |item,quantity|
+          order.item_orders.create({
+            item: item,
+            quantity: quantity,
+            price: item.price
+            })
+        end
+        session.delete(:cart)
+        flash[:success] = ['Your order has been successfully created!']
+        redirect_to '/profile/orders'
+      else
+        flash[:error] = ["Please add something to your cart to place an order"]
+        redirect_to '/items'
       end
-      session.delete(:cart)
-      flash[:success] = ['Your order has been successfully created!']
-      redirect_to '/profile/orders'
     else
-      flash[:error] = ["Please add something to your cart to place an order"]
-      redirect_to '/items'
+      @address = Address.new(address_params)
+      flash.now[:error] = address.errors.full_messages
+      render :new
     end
   end
 
@@ -52,5 +63,9 @@ class UserOrdersController < ApplicationController
 
   def require_user
     render_404 unless current_user
+  end
+
+  def address_params
+    params.permit(:nickname, :address, :city, :state, :zip)
   end
 end
