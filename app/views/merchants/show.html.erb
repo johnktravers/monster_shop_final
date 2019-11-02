@@ -1,0 +1,30 @@
+<h1 class="mt-4 mb-3"><%= link_to @merchant.name, "/merchants/#{@merchant.id}" %></h1>
+<h6 class="address text-center">
+<%= @merchant.address %><br>
+<%= @merchant.city %>, <%= @merchant.state %> <%= @merchant.zip %>
+</h6>
+
+<section class="container-fluid row justify-content-center">
+  <section class="card card-body bg-light m-3 p-4 col-md-8 merchant-stats" id = 'statistics'>
+    <p><%= "Number of Items: #{@merchant.item_count}" %></p>
+    <p><%= "Average Price of Items: #{number_to_currency(@merchant.average_item_price)}" %></p>
+    <article class="distinct-cities">
+      <% if !@merchant.orders.empty? %>
+      <p>Cities that order these items:</p>
+      <ul>
+        <% @merchant.distinct_cities.each do |city| %>
+        <li><%= city %></li>
+        <% end %>
+      </ul>
+      <% else %>
+      <p>No items have been sold 🥺</p>
+      <% end %>
+    </article>
+  </section>
+</section>
+
+<section class='container-fluid justify-content-center d-flex mt-3'>
+  <p class='ml-2 mr-2'><%= link_to "All #{@merchant.name} Items", "/merchants/#{@merchant.id}/items", class: 'btn btn-secondary' %></p>
+  <p class='ml-2 mr-2'><%= link_to "Update Merchant", "/merchants/#{@merchant.id}/edit", class: 'btn btn-primary' %></p>
+  <p class='ml-2 mr-2'><%= link_to "Delete Merchant", "/merchants/#{@merchant.id}", method: :delete, class: 'btn btn-danger' if @merchant.orders.empty? %></p>
+</section>

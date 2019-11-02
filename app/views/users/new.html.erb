@@ -1,0 +1,49 @@
+<h1 class='mt-4 mb-3'>Register</h1>
+
+<%= form_tag '/users', method: :post do %>
+  <section class='form-group form-width'>
+    <p>
+      <%= label_tag :name %>
+      <%= text_field_tag :name, @user.name, class: 'form-control' %>
+    </p>
+
+    <p>
+      <%= label_tag :address %>
+      <%= text_field_tag :address, @user.address, class: 'form-control' %>
+    </p>
+
+    <p>
+      <%= label_tag :city %>
+      <%= text_field_tag :city, @user.city, class: 'form-control' %>
+    </p>
+
+    <p>
+      <%= label_tag :state %>
+      <%= text_field_tag :state, @user.state, class: 'form-control' %>
+    </p>
+
+    <p>
+      <%= label_tag :zip %>
+      <%= text_field_tag :zip, @user.zip, class: 'form-control' %>
+    </p>
+
+    <p>
+      <%= label_tag :email %>
+      <%= email_field_tag :email, nil, class: 'form-control' %>
+    </p>
+
+    <p>
+      <%= label_tag :password %>
+      <%= password_field_tag :password, nil, class: 'form-control' %>
+    </p>
+
+    <p>
+      <%= label_tag :password_confirmation %>
+      <%= password_field_tag :password_confirmation, nil, class: 'form-control' %>
+    </p>
+
+    <p class='justify-content-center row'>
+      <%= submit_tag 'Create User', class: 'btn btn-primary mt-2' %>
+    </p>
+  </section>
+<% end %>

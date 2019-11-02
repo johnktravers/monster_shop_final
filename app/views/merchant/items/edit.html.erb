@@ -1,0 +1,13 @@
+<h1 class="mt-4 mb-2">Edit <%=link_to @item.name, "/items/#{@item.id}" %></h1>
+
+<%= render partial: 'partials/item_form', locals:
+  {
+    path: "/merchant/items/#{@item.id}/?update",
+    method: :patch,
+    name: @item.name,
+    description: @item.description,
+    price: @item.price,
+    image: @item.image,
+    inventory: @item.inventory,
+    button_text: 'Update Item'
+  } %>

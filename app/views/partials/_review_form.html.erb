@@ -1,0 +1,22 @@
+<%= form_tag path, method: method do %>
+  <section class='form-group form-width'>
+    <p>
+      <%= label_tag :title %>
+      <%= text_field_tag :title, title, class: 'form-control' %>
+    </p>
+
+    <p>
+      <%= label_tag 'Review Content' %>
+      <%= text_area_tag :content, content, class: 'form-control' %>
+    </p>
+
+    <p>
+      <%= label_tag :rating %>
+      <%= number_field_tag :rating, rating, class: 'form-control' %>
+    </p>
+
+    <p class='justify-content-center row'>
+      <%= submit_tag button_text, class: 'btn btn-primary mt-2' %>
+    </p>
+  </section>
+<% end %>

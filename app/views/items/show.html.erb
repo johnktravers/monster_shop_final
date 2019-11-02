@@ -1,0 +1,78 @@
+<h1 class='mt-4 mb-3'><%= link_to @item.name, "/items/#{@item.id}" %></h1>
+<h6 class='text-center'>Sold by: <%=link_to @item.merchant.name, "/merchants/#{@item.merchant.id}" %></h6>
+
+<section align="center" id="average-rating">
+  <% if !@item.reviews.empty? %>
+    <p><%= "Average Rating: #{@item.average_review.round(2)}" %></p>
+  <% else %>
+    <p>No Average Rating (No reviews have been made)</p>
+  <% end %>
+</section>
+
+<section class='justify-content-center item-container card card-body bg-light m-3 p-4'>
+  <article class='img-container'>
+    <img src= <%= @item.image %>>
+  </article>
+  <article class='text-container'>
+    <p><%= @item.description %></p>
+    <p>Price: <%= number_to_currency(@item.price) %> </p>
+    <p>Inventory: <%= @item.inventory %> </p>
+
+    <% if @item.active? %>
+      <p class='active'>Active</p>
+    <% else %>
+      <p class='inactive'>Inactive</p>
+    <% end %>
+
+    <p><%= button_to 'Add Item to Cart', "/cart/#{@item.id}", method: :post, class: 'btn btn-success' %></p>
+  </article>
+</section>
+
+<section class='container-fluid justify-content-center d-flex mt-4'>
+  <p><%= link_to 'Create Review', "/items/#{@item.id}/reviews/new", class: 'btn btn-secondary ml-2 mr-2' %></p>
+  <p><%= link_to "Edit Item", "/items/#{@item.id}/edit", class: 'btn btn-primary ml-2 mr-2' %></p>
+  <p><%= link_to "Delete Item", "/items/#{@item.id}", method: :delete, class: 'btn btn-danger ml-2 mr-2' if @item.no_orders? %></p>
+</section>
+
+<% if !@item.reviews.empty? %>
+  <section class='container-fluid row justify-content-center mt-4 mb-5 review-stats'>
+    <section class='card row justify-content-center m-1 p-3 review-width'>
+      <h3 class='text-center'>Top Three Reviews</h3>
+      <section class='row justify-content-center top-three-reviews'>
+        <% @item.sorted_reviews(3, :desc).each do |review| %>
+          <section class='card card-body bg-light m-2' id= 'top-review-<%= review.id %>'>
+            <h6><%= review.title %></h6>
+            <p>Rating: <%= review.rating %></p>
+          </section>
+        <% end %>
+      </section>
+    </section>
+
+    <section class='card row justify-content-center m-1 p-3 review-width'>
+      <h3 class='text-center'>Bottom Three Reviews</h3>
+      <section class='row justify-content-center bottom-three-reviews'>
+        <% @item.sorted_reviews(3, :asc).each do |review| %>
+          <section class='card card-body bg-light m-2' id= 'bottom-review-<%= review.id %>'>
+            <h6><%= review.title %></h6>
+            <p>Rating: <%= review.rating %></p>
+          </section>
+        <% end %>
+      </section>
+    </section>
+  </section>
+
+  <h3 class='text-center'>All Reviews</h3>
+  <section class='container-fluid justify-content-center list-reviews row'>
+    <% @item.reviews.each do |review| %>
+      <section class='card card-body bg-light m-3 p-4 col-md-3' id= 'review-<%= review.id %>'>
+        <h6><%= review.title %></h6>
+        <p><%= review.content %></p>
+        <p>Rating: <%= review.rating %></p>
+        <p><%= link_to 'Edit Review', "/reviews/#{review.id}/edit", class: 'btn btn-outline-primary' %></p>
+        <p><%= link_to 'Delete Review', "/reviews/#{review.id}", method: :delete, class: 'btn btn-outline-danger' %></p>
+      </section>
+    <% end %>
+  </section>
+<% else %>
+  <h3 class='text-center review-stats'>This item has not yet been reviewed.</h3>
+<% end %>

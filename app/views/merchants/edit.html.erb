@@ -1,0 +1,13 @@
+<h1 class="mt-4 mb-2">Edit <%=link_to @merchant.name, "/merchants/#{@merchant.id}" %></h1>
+
+<%= render partial: 'partials/merchant_form', locals:
+  {
+    path: "/merchants/#{@merchant.id}",
+    method: :patch,
+    name: @merchant.name,
+    address: @merchant.address,
+    city: @merchant.city,
+    state: @merchant.state,
+    zip: @merchant.zip,
+    button_text: 'Update Merchant'
+  } %>

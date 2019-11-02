@@ -1,0 +1,57 @@
+<h1 class="mt-4 mb-4">Cart</h1>
+
+<% if !@items.empty? %>
+  <table class="table table-striped table-bordered cart-table">
+    <thead>
+      <tr>
+        <th scope="col">Item</th>
+        <th scope="col">Sold By</th>
+        <th scope="col">Price</th>
+        <th scope="col">Quantity</th>
+        <th scope="col">Subtotal</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @items.each do |item,quantity| %>
+        <tr id= "cart-item-<%=item.id%>">
+          <th scope="row">
+            <span>
+              <%= image_tag item.image, class: 'cart-image center', align: 'center' %>
+              <%=link_to item.name, "/items/#{item.id}" %>
+            </span>
+          </th>
+          <td><%=link_to item.merchant.name, "/merchants/#{item.merchant.id}"%></td>
+          <td><%=number_to_currency(item.price)%></td>
+          <td>
+            <center>
+              <p><%=quantity%></p>
+              <p>
+                <%= link_to "+", "/cart/#{item.id}/increment", method: :patch, class: 'btn btn-sm btn-success' %>
+                <%= link_to "-", "/cart/#{item.id}/decrement", method: :patch, class: 'btn btn-sm btn-info' %>
+              </p>
+              <p><%= link_to "Remove", "/cart/#{item.id}",method: :delete, class: 'btn btn-outline-danger' %></p>
+            </center>
+          </td>
+          <td><%=number_to_currency(cart.subtotal(item))%></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <h4 class="text-center">Grand Total: <%= number_to_currency(cart.total) %></h4>
+
+  <section class='container-fluid justify-content-center d-flex mt-4'>
+    <p><%= link_to "Empty Cart", "/cart", method: :delete, class: 'btn btn-danger ml-2 mr-2' %></p>
+    <% if current_user %>
+      <p><%= link_to "Checkout", "/profile/orders", method: :post, class: 'btn btn-success ml-2 mr-2' %></p>
+      </section>
+    <% else %>
+      </section>
+      <section id='cart-logged-out-warning'>
+        <h6 class='text-center'>You must <%= link_to 'register', '/register' %> and <%= link_to 'login', '/login' %> in order to complete checkout process.</h6>
+        <br>
+      </section>
+    <% end %>
+<% else %>
+  <h3 align="center">Cart is currently empty</h3>
+<% end %>

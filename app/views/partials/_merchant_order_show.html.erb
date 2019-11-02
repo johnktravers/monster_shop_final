@@ -1,0 +1,56 @@
+<h1 class="mt-4 mb-4">Order #<%= @order.id %></h1>
+
+<hr class="mt-4 mb-3">
+
+<section id="customer-info">
+  <h2 class="text-center mb-4 mt-4">Customer Information</h2>
+  <h5 class="text-center"><%= @order.user.name %></h5>
+  <h6 class="text-center">
+    <%= @order.user.address %><br>
+    <%= @order.user.city %>, <%= @order.user.state %> <%= @order.user.zip %>
+  </h6>
+</section>
+
+<hr class="mt-5">
+
+<h2 class="text-center mb-4 mt-4">Item Details</h2>
+
+<table class="table table-striped table-bordered cart-table">
+  <thead>
+    <tr>
+      <th scope="col">Item</th>
+      <th scope="col">Image</th>
+      <th scope="col">Price</th>
+      <th scope="col">Quantity</th>
+      <th scope="col">Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @merchant.item_orders_in_order(@order).each do |item_order|%>
+      <tr>
+        <section id = "item-<%= item_order.item_id %>">
+          <th><%= link_to item_order.item.name, "/items/#{item_order.item_id}" %></th>
+          <td align='center'><%= image_tag item_order.item.image %></td>
+          <td><%= number_to_currency(item_order.price)%></td>
+          <td><%= item_order.quantity %></td>
+          <td align="center">
+            <% if item_order.unfulfilled? %>
+              <p class="inactive">Unfulfilled</p>
+              <% if item_order.enough_inventory? %>
+                <%= button_to 'Fulfill Item', fulfill_item_path + "#{item_order.id}", method: :patch, class: 'btn btn-outline-success' %>
+              <% else %>
+                <p>Cannot Fulfill <br>(Not Enough Inventory)</p>
+              <% end %>
+            <% elsif item_order.fulfilled? %>
+              <p class="active">Fulfilled</p>
+            <% elsif item_order.cancelled? %>
+              <p class="inactive">Cancelled</p>
+            <% end %>
+          </td>
+        </section>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>

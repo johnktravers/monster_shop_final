@@ -1,0 +1,89 @@
+.form-width {
+  width: 50%;
+}
+
+#nav-text {
+  color: white;
+}
+
+table.profile-info {
+ font-family: arial, sans-serif;
+ border-collapse: collapse;
+ width: 50%;
+ margin: 0 auto;
+}
+
+td, th {
+  border: 1px solid black;
+  padding: 5px 5px 5px 10px;
+  vertical-align: middle !important;
+}
+
+td.cart-table {
+  width: 20%;
+}
+
+table.cart-items {
+ font-family: arial, sans-serif;
+ border-collapse: collapse;
+ width: 100%;
+}
+
+td:first-child {
+  width: 100px;
+}
+
+h1 {
+  text-align: center;
+}
+
+img {
+  width: 75%;
+}
+
+.active {
+  color: green;
+}
+
+.inactive {
+  color: red;
+}
+
+.form-width {
+  width: 50%;
+  margin: 0 auto;
+}
+
+.img-container {
+  width: 48%;
+  position: relative;
+  margin-left: 5%;
+}
+
+.item-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.text-container {
+  width: 48%;
+}
+
+.item-container {
+ margin: auto;
+ float: none;
+ flex-direction: row !important;
+}
+
+.review-width {
+  width: 49%;
+}
+
+.cart-table {
+  table-layout: fixed ;
+  width: 100% ;
+}
+
+.cart-image {
+  width: 90%;
+}

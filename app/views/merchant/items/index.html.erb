@@ -1,0 +1,34 @@
+<h1 class="mt-4 mb-2">My Items</h1>
+
+<section class="container-fluid row justify-content-center">
+  <% @merchant.items.each do |item| %>
+    <section class = "card card-body bg-light m-3 p-4 col-md-3" id= 'item-<%=item.id%>'>
+      <h2 class="text-center"> <%=link_to item.name, "/items/#{item.id}" %> </h2>
+      <%= link_to image_tag(item.image), "/items/#{item.id}", class: 'item-image center mt-4 mb-4', align: 'center' %>
+      <p><%= item.description %></p>
+      <p>Price: <%=number_to_currency(item.price) %></p>
+      <p>Inventory: <%= item.inventory %></p>
+      <% if item.active? %>
+        <p class="active">Active</p>
+        <% if current_user.merchant_admin? %>
+          <%= link_to 'Deactivate', "/merchant/items/#{item.id}/?toggle_status", method: :patch, class: 'btn btn-outline-danger mt-3' %>
+        <% end %>
+      <% else %>
+        <p class="inactive">Inactive</p>
+        <% if current_user.merchant_admin? %>
+          <%= link_to 'Activate', "/merchant/items/#{item.id}/?toggle_status", method: :patch, class: 'btn btn-outline-success mt-3' %>
+        <% end %>
+      <% end %>
+      <% if current_user.merchant_admin? %>
+        <%= link_to 'Edit Item', "/merchant/items/#{item.id}/edit", class: 'btn btn-outline-primary mt-3' %>
+        <% if item.item_orders.empty? %>
+          <%= link_to 'Delete Item', "/merchant/items/#{item.id}", method: :delete, class: 'btn btn-outline-danger mt-3' %>
+        <% end %>
+      <% end %>
+    </section>
+    <% end %>
+</section>
+
+<% if current_user.merchant_admin? %>
+  <p align="center"><%= link_to 'Add New Item', "/merchant/items/new", class: 'btn btn-primary mt-3' %></p>
+<% end %>

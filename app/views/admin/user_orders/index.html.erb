@@ -1,0 +1,5 @@
+<%= render partial: 'partials/user_orders_index', locals:
+  {
+    name: "#{@orders.first.user.name}'s",
+    order_show_path: "/admin/users/#{@orders.first.user_id}/orders/"
+  } %>

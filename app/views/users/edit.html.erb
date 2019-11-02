@@ -1,0 +1,63 @@
+<% unless @info == 'false' %>
+  <h1 class='mt-4 mb-3'>Update Your Information</h1>
+
+  <%= form_tag '/profile', method: :patch do %>
+    <section class='form-group form-width'>
+      <p>
+        <%= label_tag :name %>
+        <%= text_field_tag :name, current_user.name, class: 'form-control' %>
+      </p>
+
+      <p>
+        <%= label_tag :email %>
+        <%= email_field_tag :email, current_user.email, class: 'form-control' %>
+      </p>
+
+      <p>
+        <%= label_tag :address %>
+        <%= text_field_tag :address, current_user.address, class: 'form-control' %>
+      </p>
+
+      <p>
+        <%= label_tag :city %>
+        <%= text_field_tag :city, current_user.city, class: 'form-control' %>
+      </p>
+
+      <p>
+        <%= label_tag :state %>
+        <%= text_field_tag :state, current_user.state, class: 'form-control' %>
+      </p>
+
+      <p>
+        <%= label_tag :zip %>
+        <%= text_field_tag :zip, current_user.zip, class: 'form-control' %>
+      </p>
+
+      <p class='justify-content-center row'>
+        <%= submit_tag 'Update Info', class: 'btn btn-primary mt-2' %>
+      </p>
+    </section>
+  <% end %>
+
+<% else %>
+  <h1 class='mt-4 mb-3'>Change Your Password</h1>
+
+  <%= form_tag "/profile?info=false", method: :patch do %>
+    <section class='form-group form-width'>
+      <p>
+        <%= label_tag :password %>
+        <%= password_field_tag :password, nil, class: 'form-control' %>
+      </p>
+
+      <p>
+        <%= label_tag :password_confirmation %>
+        <%= password_field_tag :password_confirmation, nil, class: 'form-control' %>
+      </p>
+
+      <p class='justify-content-center row'>
+        <%= submit_tag 'Update Password', class: 'btn btn-primary mt-2' %>
+      </p>
+    </section>
+  <% end %>
+
+<% end %>

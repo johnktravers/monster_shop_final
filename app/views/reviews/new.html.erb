@@ -1,0 +1,11 @@
+<h1 class="mt-4 mb-3">Create Review for <%=link_to @item.name, "/items/#{@item.id}" %></h1>
+
+<%= render partial: 'partials/review_form', locals:
+  {
+    path: "/items/#{@item.id}/reviews",
+    method: :post,
+    title: nil,
+    content: nil,
+    rating: nil,
+    button_text: 'Create Review'
+  } %>

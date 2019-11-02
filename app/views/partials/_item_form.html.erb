@@ -1,0 +1,32 @@
+<%= form_tag path, method: method do %>
+  <section class='form-group form-width'>
+    <p>
+      <%= label_tag :name %>
+      <%= text_field_tag :name, name, class: 'form-control' %>
+    </p>
+
+    <p>
+      <%= label_tag :description %>
+      <%= text_area_tag :description, description, class: 'form-control' %>
+    </p>
+
+    <p>
+      <%= label_tag :price %>
+      <%= number_field_tag :price, price, class: 'form-control', step: 0.01 %>
+    </p>
+
+    <p>
+      <%= label_tag :image %>
+      <%= text_field_tag :image, image, class: 'form-control' %>
+    </p>
+
+    <p>
+      <%= label_tag :inventory %>
+      <%= number_field_tag :inventory, inventory, class: 'form-control' %>
+    </p>
+
+    <p class='justify-content-center row'>
+      <%= submit_tag button_text, class: 'btn btn-primary mt-2' %>
+    </p>
+  </section>
+<% end %>

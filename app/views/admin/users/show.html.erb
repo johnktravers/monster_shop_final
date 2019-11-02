@@ -1,0 +1,5 @@
+<%= render partial: 'partials/user_profile', locals:
+  {
+    admin: true,
+    user_orders_path: "/admin/users/#{@user.id}/orders"
+  } %>
