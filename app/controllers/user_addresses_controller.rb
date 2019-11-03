@@ -18,6 +18,15 @@ class UserAddressesController < ApplicationController
     end
   end
 
+  def destroy
+    address = current_user.addresses.find_by(id: params[:id])
+    if address && address.orders.empty?
+      address.destroy
+      flash[:success] = ['Your address has been successfully deleted!']
+      redirect_to '/profile'
+    end
+  end
+
 
   private
 
