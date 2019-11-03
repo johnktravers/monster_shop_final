@@ -3,7 +3,7 @@ class Order <ApplicationRecord
 
   has_many :item_orders
   has_many :items, through: :item_orders
-  belongs_to :user
+  belongs_to :address
 
   enum status: %w(packaged pending shipped cancelled)
 
@@ -13,5 +13,9 @@ class Order <ApplicationRecord
 
   def total_item_quantity
     item_orders.sum(:quantity)
+  end
+
+  def user
+    address.user
   end
 end

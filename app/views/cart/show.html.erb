@@ -43,7 +43,7 @@
   <section class='container-fluid justify-content-center d-flex mt-4'>
     <p><%= link_to "Empty Cart", "/cart", method: :delete, class: 'btn btn-danger ml-2 mr-2' %></p>
     <% if current_user %>
-      <p><%= link_to "Checkout", "/profile/orders", method: :post, class: 'btn btn-success ml-2 mr-2' %></p>
+      <p><%= link_to "Checkout", "/profile/orders/new", class: 'btn btn-success ml-2 mr-2' %></p>
       </section>
     <% else %>
       </section>

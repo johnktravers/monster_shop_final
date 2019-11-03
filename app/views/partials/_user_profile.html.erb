@@ -11,26 +11,10 @@
     <td>Email</td>
     <td><%= @user.email %></td>
   </tr>
-  <tr>
-    <td>Address</td>
-    <td><%= @user.address %></td>
-  </tr>
-  <tr>
-    <td>City</td>
-    <td><%= @user.city %></td>
-  </tr>
-  <tr>
-    <td>State</td>
-    <td><%= @user.state %></td>
-  </tr>
-  <tr>
-    <td>Zip</td>
-    <td><%= @user.zip %></td>
-  </tr>
 </table>
 
 <article class="justify-content-center row mt-4">
-  <% if !@user.orders.empty? %>
+  <% if @user.orders.any? %>
     <%= link_to 'Your Orders', user_orders_path, class: 'btn btn-success ml-2 mr-2' %>
   <% end %>
   <% if !admin %>
@@ -38,3 +22,26 @@
     <%= link_to 'Change Your Password', '/profile/edit?info=false', class: 'btn btn-danger ml-2 mr-2' %>
   <% end %>
 </article>
+
+<hr class="mt-5 mb-4">
+
+<h2 class='text-center m-4'>Shipping Addresses</h2>
+
+<section class="row justify-content-center">
+  <% @user.addresses.each do |address|%>
+    <article class='card card-body bg-light m-2 p-3 col-md-3' id= 'address-<%= address.id %>' >
+      <h4 class='text-center mb-3'><%= address.nickname.titleize %></h4>
+      <h6 class='text-center'><%= address.address %></h6>
+      <h6 class='text-center'><%= "#{address.city}, #{address.state} #{address.zip}" %></h6>
+
+      <article class="justify-content-center row mt-4">
+        <% if address.orders.empty? %>
+          <%= link_to 'Edit Address', "/profile/addresses/#{address.id}/edit", class: 'btn btn-sm btn-primary ml-2 mr-2' %>
+          <%= button_to 'Delete Address', "/profile/addresses/#{address.id}", method: :delete, class: 'btn btn-sm btn-danger ml-2 mr-2' %>
+        <% end %>
+      </article>
+    </article>
+  <% end %>
+</section>
+
+<p align="center"><%= link_to "New Address", "/profile/addresses/new", class: 'btn btn-success mt-3' %></p>

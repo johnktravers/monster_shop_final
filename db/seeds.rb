@@ -19,21 +19,21 @@ florist = Merchant.create(
   address: '1523 N Main Street',
   city: 'Plaintree',
   state: 'MN',
-  zip: 49155
+  zip: '49155'
 )
 fuschia = Merchant.create(
   name: 'Back to the Fuschia',
   address: '943 Burberry Drive',
   city: 'Kirksville',
   state: 'NC',
-  zip: 30846
+  zip: '30846'
 )
 pine_oakio = Merchant.create(
   name: 'Pine Oakio',
   address: '12 Montgomery Lane',
   city: 'Alden',
   state: 'AL',
-  zip: 61350
+  zip: '61350'
 )
 
 #---------------------------- Items ----------------------------#
@@ -113,80 +113,99 @@ tulip = Item.create(
 #---------------------------- Users ----------------------------#
 cynthia = User.create(
   name: 'Cynthia Hall',
-  address: '9247 E 42nd Avenue',
-  city: 'Rochester',
-  state: 'NY',
-  zip: '48231',
   email: "cynthiahall@hotmail.com",
   password: "password",
   password_confirmation: "password"
 )
+cynthia.addresses.create!(
+  nickname: 'Home',
+  address: '9247 E 42nd Avenue',
+  city: 'Rochester',
+  state: 'NY',
+  zip: '48231'
+)
+
 lynda = User.create(
   name: "Lynda Ferguson",
-  address: "452 Cherry St",
-  city: "Tucson",
-  state: "AZ",
-  zip: 85736,
   email: "lferguson@gmail.com",
   password: "password1",
   password_confirmation: "password1"
 )
+lynda.addresses.create(
+  nickname: 'Home',
+  address: "452 Cherry St",
+  city: "Tucson",
+  state: "AZ",
+  zip: '85736'
+)
+
 merchant_employee = florist.users.create(
   name: "Lael Whipple",
-  address: "7392 Oklahoma Ave",
-  city: "Nashville",
-  state: "TN",
-  zip: 37966,
   email: "whip_whipple@yahoo.com",
   password: "password12",
   password_confirmation: "password12",
   role: 1
 )
+merchant_employee.addresses.create(
+  nickname: 'Work',
+  address: "7392 Oklahoma Ave",
+  city: "Nashville",
+  state: "TN",
+  zip: '37966'
+)
+
 merchant_admin = pine_oakio.users.create(
   name: "Dudley Laughlin",
-  address: "2348 Willow Dr",
-  city: "Big Sky",
-  state: "MT",
-  zip: 59716,
   email: "bigskyguy@aol.com",
   password: "password123",
   password_confirmation: "password123",
   role: 2
 )
+merchant_admin.addresses.create(
+  nickname: 'Home',
+  address: "2348 Willow Dr",
+  city: "Big Sky",
+  state: "MT",
+  zip: '59716'
+)
+
 admin = User.create(
   name: "Dorian Bouchard",
-  address: "7890 Montreal Blvd",
-  city: "New Orleans",
-  state: "LA", zip:
-  70032,
   email: "ouibouchard@gmail.fr",
   password: "password1234",
   password_confirmation: "password1234",
-  role:3
+  role: 3
+)
+admin.addresses.create(
+  nickname: 'Home',
+  address: "7890 Montreal Blvd",
+  city: "New Orleans",
+  state: "LA",
+  zip: '70032'
 )
 
 #---------------------------- Orders ----------------------------#
-order_1 = cynthia.orders.create(status: 3)
+order_1 = cynthia.addresses.first.orders.create(status: 3)
 order_1.item_orders.create(item_id: dahlia.id, quantity: 2, price: dahlia.price, status: 2)
 order_1.item_orders.create(item_id: rose.id, quantity: 1, price: rose.price, status: 2)
 
-order_2 = lynda.orders.create
+order_2 = lynda.addresses.first.orders.create
 order_2.item_orders.create(item_id: plumeria.id, quantity: 1, price: plumeria.price)
 order_2.item_orders.create(item_id: rose.id, quantity: 3, price: rose.price)
 order_2.item_orders.create(item_id: hibiscus.id, quantity: 1, price: hibiscus.price)
 
-order_3 = cynthia.orders.create
+order_3 = cynthia.addresses.first.orders.create
 order_3.item_orders.create(item_id: maple.id, quantity: 2, price: maple.price)
 order_3.item_orders.create(item_id: tulip.id, quantity: 6, price: tulip.price)
 
-order_4 = lynda.orders.create(status: 2)
+order_4 = lynda.addresses.first.orders.create(status: 2)
 order_4.item_orders.create(item_id: hibiscus.id, quantity: 4, price: hibiscus.price, status: 1)
 
-order_5 = lynda.orders.create(status: 0)
+order_5 = lynda.addresses.first.orders.create(status: 0)
 order_5.item_orders.create(item_id: lily.id, quantity: 3, price: lily.price, status: 1)
 order_5.item_orders.create(item_id: dahlia.id, quantity: 4, price: dahlia.price, status: 1)
 
-order_6 = cynthia.orders.create
+order_6 = cynthia.addresses.first.orders.create
 order_6.item_orders.create(item_id: lily.id, quantity: 2, price: maple.price)
 order_6.item_orders.create(item_id: tulip.id, quantity: 3, price: tulip.price)
 order_6.item_orders.create(item_id: rose.id, quantity: 10, price: tulip.price)

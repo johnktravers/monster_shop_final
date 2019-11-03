@@ -15,10 +15,11 @@ describe ItemOrder, type: :model do
 
   describe 'status' do
     before :each do
-      @meg = Merchant.create(name: "Meg's Bike Shop", address: '123 Bike Rd.', city: 'Denver', state: 'CO', zip: 80203)
+      @meg = Merchant.create(name: "Meg's Bike Shop", address: '123 Bike Rd.', city: 'Denver', state: 'CO', zip: '80203')
       @tire = @meg.items.create(name: "Gatorskins", description: "They'll never pop!", price: 100, image: "https://www.rei.com/media/4e1f5b05-27ef-4267-bb9a-14e35935f218?size=784x588", inventory: 12)
-      @user = User.create!(name: "Gmoney", address: "123 Lincoln St", city: "Denver", state: "CO", zip: 23840, email: "test@gmail.com", password: "password123", password_confirmation: "password123")
-      @order = Order.create!(user_id: @user.id)
+      @user = User.create!(name: "Gmoney", email: "test@gmail.com", password: "password123", password_confirmation: "password123")
+      @address = @user.addresses.create!(nickname: 'Home', address: '123 Lincoln St', city: 'Denver', state: 'CO', zip: '23840')
+      @order = Order.create!(address_id: @address.id)
     end
 
     it 'can be created as unfulfilled' do
@@ -47,8 +48,9 @@ describe ItemOrder, type: :model do
     before :each do
       @meg = Merchant.create(name: "Meg's Bike Shop", address: '123 Bike Rd.', city: 'Denver', state: 'CO', zip: 80203)
       @tire = @meg.items.create(name: "Gatorskins", description: "They'll never pop!", price: 100, image: "https://www.rei.com/media/4e1f5b05-27ef-4267-bb9a-14e35935f218?size=784x588", inventory: 12)
-      @user = User.create!(name: "Gmoney", address: "123 Lincoln St", city: "Denver", state: "CO", zip: 23840, email: "test@gmail.com", password: "password123", password_confirmation: "password123")
-      @order = Order.create!(user_id: @user.id)
+      @user = User.create!(name: "Gmoney", email: "test@gmail.com", password: "password123", password_confirmation: "password123")
+      @address = @user.addresses.create!(nickname: 'Home', address: '123 Lincoln St', city: 'Denver', state: 'CO', zip: '23840')
+      @order = Order.create!(address_id: @address.id)
       @item_order_1 = @order.item_orders.create!(item: @tire, price: @tire.price, quantity: 13)
       @item_order_2 = @order.item_orders.create!(item: @tire, price: @tire.price, quantity: 2, status: 1)
       @item_order_3 = @order.item_orders.create!(item: @tire, price: @tire.price, quantity: 5, status: 2)
