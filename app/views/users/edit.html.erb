@@ -13,26 +13,6 @@
         <%= email_field_tag :email, current_user.email, class: 'form-control' %>
       </p>
 
-      <p>
-        <%= label_tag :address %>
-        <%= text_field_tag :address, current_user.address, class: 'form-control' %>
-      </p>
-
-      <p>
-        <%= label_tag :city %>
-        <%= text_field_tag :city, current_user.city, class: 'form-control' %>
-      </p>
-
-      <p>
-        <%= label_tag :state %>
-        <%= text_field_tag :state, current_user.state, class: 'form-control' %>
-      </p>
-
-      <p>
-        <%= label_tag :zip %>
-        <%= text_field_tag :zip, current_user.zip, class: 'form-control' %>
-      </p>
-
       <p class='justify-content-center row'>
         <%= submit_tag 'Update Info', class: 'btn btn-primary mt-2' %>
       </p>
