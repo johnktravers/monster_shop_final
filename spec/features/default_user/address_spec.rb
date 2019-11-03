@@ -12,6 +12,54 @@ RSpec.describe 'As a default user on my profile page' do
     click_button 'Login'
   end
 
+  it 'can create a new address by clicking a link' do
+    visit '/profile'
+    click_link 'New Address'
+
+    expect(current_path).to eq("/profile/addresses/new")
+
+    fill_in :nickname, with: 'Mountain Villa'
+    fill_in :address, with: '132 Gold Ln'
+    fill_in :city, with: 'Aspen'
+    fill_in :state, with: 'CO'
+    fill_in :zip, with: '80341'
+
+    click_button 'Create Address'
+
+    address = Address.last
+
+    expect(current_path).to eq('/profile')
+    expect(page).to have_content('You have successfully added a new address!')
+
+    within "#address-#{address.id}" do
+      expect(page).to have_content('Mountain Villa')
+      expect(page).to have_content('132 Gold Ln')
+      expect(page).to have_content('Aspen')
+      expect(page).to have_content('CO')
+      expect(page).to have_content('80341')
+    end
+  end
+
+  it 'repopulates the form and shows error messages if not filled in' do
+    visit '/profile/addresses/new'
+
+    fill_in :nickname, with: 'Mountain Villa'
+    fill_in :address, with: ''
+    fill_in :city, with: 'Aspen'
+    fill_in :state, with: ''
+    fill_in :zip, with: ''
+
+    click_button 'Create Address'
+
+    expect(current_path).to eq('/profile/addresses')
+    expect(page).to have_content('Address can\'t be blank')
+    expect(page).to have_content('State can\'t be blank')
+    expect(page).to have_content('Zip can\'t be blank')
+
+    expect(page).to have_selector("input[value='Mountain Villa']")
+    expect(page).to have_selector("input[value='Aspen']")
+  end
+
   it 'can click a link to edit an address' do
     visit '/profile'
     within("#address-#{@address_1.id}") { click_link 'Edit Address' }
