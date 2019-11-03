@@ -30,7 +30,7 @@
 <section class="row justify-content-center">
   <% @user.addresses.each do |address|%>
     <article class='card card-body bg-light m-2 p-3 col-md-3' id= 'address-<%= address.id %>' >
-      <h4 class='text-center mb-3'><%= address.nickname.capitalize %></h4>
+      <h4 class='text-center mb-3'><%= address.nickname.titleize %></h4>
       <h6 class='text-center'><%= address.address %></h6>
       <h6 class='text-center'><%= "#{address.city}, #{address.state} #{address.zip}" %></h6>
 
