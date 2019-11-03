@@ -112,11 +112,12 @@ RSpec.describe 'As a default user on my profile page' do
     expect(page).to_not have_css("#address-#{@address_1.id}")
   end
 
-  it 'cannot delete an address that has orders' do
+  it 'cannot edit or delete an address that has orders' do
     @address_1.orders.create!
     visit '/profile'
 
     within "#address-#{@address_1.id}" do
+      expect(page).to_not have_link 'Edit Address'
       expect(page).to_not have_button 'Delete Address'
     end
   end
