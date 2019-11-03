@@ -1,6 +1,21 @@
 class UserAddressesController < ApplicationController
   before_action :require_user
 
+  def new
+    @address = Address.new
+  end
+
+  def create
+    @address = current_user.addresses.new(address_params)
+    if @address.save
+      flash[:success] = ['You have successfully added a new address!']
+      redirect_to '/profile'
+    else
+      flash[:error] = @address.errors.full_messages
+      render :new
+    end
+  end
+
   def edit
     @address = current_user.addresses.find_by(id: params[:id])
     render_404 unless @address
