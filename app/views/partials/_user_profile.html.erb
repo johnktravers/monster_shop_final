@@ -36,7 +36,9 @@
 
       <article class="justify-content-center row mt-4">
         <%= link_to 'Edit Address', "/profile/addresses/#{address.id}/edit", class: 'btn btn-sm btn-primary ml-2 mr-2' %>
-        <%= button_to 'Delete Address', "/profile/addresses/#{address.id}", method: :delete, class: 'btn btn-sm btn-danger ml-2 mr-2' %>
+        <% if address.orders.empty? %>
+          <%= button_to 'Delete Address', "/profile/addresses/#{address.id}", method: :delete, class: 'btn btn-sm btn-danger ml-2 mr-2' %>
+        <% end %>
       </article>
     </article>
   <% end %>
