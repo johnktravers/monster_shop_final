@@ -55,4 +55,21 @@ RSpec.describe 'As a default user on my profile page' do
     expect(page).to have_content('State can\'t be blank')
   end
 
+  it 'can delete an address that does not have orders' do
+    visit '/profile'
+    within("#address-#{@address_1.id}") { click_button 'Delete Address' }
+
+    expect(current_path).to eq('/profile')
+    expect(page).to have_content('Your address has been successfully deleted!')
+    expect(page).to_not have_css("#address-#{@address_1.id}")
+  end
+
+  it 'cannot delete an address that has orders' do
+    @address_1.orders.create!
+    visit '/profile'
+
+    within "#address-#{@address_1.id}" do
+      expect(page).to_not have_button 'Delete Address'
+    end
+  end
 end
