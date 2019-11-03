@@ -2,13 +2,13 @@ require 'rails_helper'
 
 RSpec.describe 'As a default user' do
   before :each do
-    @user = User.create!(name: "Gmoney", address: "123 Lincoln St", city: "Denver", state: "CO", zip: 23840, email: "test@gmail.com", password: "password123", password_confirmation: "password123")
+    @user = User.create!(name: 'Gmoney', email: 'user@gmail.com', password: 'password123', password_confirmation: 'password123')
+    @address_1 = @user.addresses.create(nickname: 'Home', address: '123 Lincoln St', city: 'Denver', state: 'CO', zip: '23840')
+    @address_2 = @user.addresses.create(nickname: 'Work', address: '412 Broadway Blvd', city: 'Topeka', state: 'KS', zip: '34142')
 
     visit '/login'
-
-    fill_in :email, with: 'test@gmail.com'
+    fill_in :email, with: 'user@gmail.com'
     fill_in :password, with: 'password123'
-
     click_button 'Login'
   end
 
@@ -17,12 +17,24 @@ RSpec.describe 'As a default user' do
 
     within '.profile-info' do
       expect(page).to have_content(@user.name)
-      expect(page).to have_content(@user.address)
-      expect(page).to have_content(@user.city)
-      expect(page).to have_content(@user.state)
-      expect(page).to have_content(@user.zip)
       expect(page).to have_content(@user.email)
       expect(page).to_not have_content(@user.password)
+    end
+
+    within "#address-#{@address_1.id}" do
+      expect(page).to have_content(@address_1.nickname)
+      expect(page).to have_content(@address_1.address)
+      expect(page).to have_content(@address_1.city)
+      expect(page).to have_content(@address_1.state)
+      expect(page).to have_content(@address_1.zip)
+    end
+
+    within "#address-#{@address_2.id}" do
+      expect(page).to have_content(@address_2.nickname)
+      expect(page).to have_content(@address_2.address)
+      expect(page).to have_content(@address_2.city)
+      expect(page).to have_content(@address_2.state)
+      expect(page).to have_content(@address_2.zip)
     end
   end
 
@@ -34,21 +46,13 @@ RSpec.describe 'As a default user' do
     expect(current_path).to eq('/profile/edit')
 
     expect(page).to have_selector("input[value='Gmoney']")
-    expect(page).to have_selector("input[value='123 Lincoln St']")
-    expect(page).to have_selector("input[value='Denver']")
-    expect(page).to have_selector("input[value='CO']")
-    expect(page).to have_selector("input[value='23840']")
-    expect(page).to have_selector("input[value='test@gmail.com']")
+    expect(page).to have_selector("input[value='user@gmail.com']")
   end
 
   it 'can click a button to edit profile data' do
     visit '/profile/edit'
 
     fill_in :name, with: 'Billy Bob'
-    fill_in :address, with: '542 Broadway St'
-    fill_in :city, with: 'Topeka'
-    fill_in :state, with: 'KS'
-    fill_in :zip, with: 54205
     fill_in :email, with: 'billy.bob@gmail.com'
 
     click_button 'Update Info'
@@ -58,10 +62,6 @@ RSpec.describe 'As a default user' do
 
     within '.profile-info' do
       expect(page).to have_content('Billy Bob')
-      expect(page).to have_content('542 Broadway St')
-      expect(page).to have_content('Topeka')
-      expect(page).to have_content('KS')
-      expect(page).to have_content(54205)
       expect(page).to have_content('billy.bob@gmail.com')
     end
   end
@@ -70,18 +70,26 @@ RSpec.describe 'As a default user' do
     visit '/profile/edit'
 
     fill_in :name, with: ''
-    fill_in :address, with: '542 Broadway St'
-    fill_in :city, with: ''
-    fill_in :state, with: 'KS'
-    fill_in :zip, with: 54205
     fill_in :email, with: 'billy.bob@gmail.com'
 
     click_button 'Update Info'
 
     expect(current_path).to eq('/profile')
-    expect(page).to have_content("Name can't be blank\nCity can't be blank")
+    expect(page).to have_content("Name can't be blank")
   end
 
+  it 'sees flash messages if email is not unique' do
+    User.create!(name: 'Hank Smith', email: 'hank@gmail.com', password: 'password123', password_confirmation: 'password123')
+    visit '/profile/edit'
+
+    fill_in :name, with: 'Billy Bob'
+    fill_in :email, with: 'hank@gmail.com'
+
+    click_button 'Update Info'
+
+    expect(current_path).to eq('/profile')
+    expect(page).to have_content('Email has already been taken')
+  end
 
   it 'can click a button to update password' do
     visit '/profile'
@@ -129,10 +137,10 @@ RSpec.describe 'As a default user' do
   end
 
   it "shows a link to orders if user has orders" do
-    meg = Merchant.create(name: "Meg's Bike Shop", address: '123 Bike Rd.', city: 'Denver', state: 'CO', zip: 80203)
+    meg = Merchant.create(name: "Meg's Bike Shop", address: '123 Bike Rd.', city: 'Denver', state: 'CO', zip: '80203')
     tire = meg.items.create(name: "Gatorskins", description: "They'll never pop!", price: 100, image: "https://www.rei.com/media/4e1f5b05-27ef-4267-bb9a-14e35935f218?size=784x588", inventory: 12)
 
-    order_1 = Order.create!(user_id: @user.id)
+    order_1 = Order.create!(address_id: @address_1.id)
     order_1.item_orders.create!(item_id: tire.id, price: tire.price, quantity: 2)
 
     visit '/profile'
@@ -146,5 +154,12 @@ RSpec.describe 'As a default user' do
     visit '/profile'
 
     expect(page).to_not have_link('Your Orders')
+  end
+
+  it 'shows a link to edit each address' do
+    visit '/profile'
+    within("#address-#{@address_1.id}") { click_link 'Edit Address' }
+
+    expect(current_path).to eq("/profile/addresses/#{@address_1.id}/edit")
   end
 end
