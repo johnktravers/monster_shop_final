@@ -1,15 +1,9 @@
 require 'rails_helper'
 
-RSpec.describe 'As a default user' do
+RSpec.describe 'As a default user on my profile page' do
   before :each do
-    @user = User.create!(name: 'Gmoney', email: 'user@gmail.com', password: 'password123', password_confirmation: 'password123')
-    @address_1 = @user.addresses.create(nickname: 'Home', address: '123 Lincoln St', city: 'Denver', state: 'CO', zip: '23840')
-    @address_2 = @user.addresses.create(nickname: 'Work', address: '412 Broadway Blvd', city: 'Topeka', state: 'KS', zip: '34142')
-
-    visit '/login'
-    fill_in :email, with: 'user@gmail.com'
-    fill_in :password, with: 'password123'
-    click_button 'Login'
+    create_user_with_addresses
+    login_as_default_user
   end
 
   it 'can see all profile data expect password' do
@@ -45,7 +39,7 @@ RSpec.describe 'As a default user' do
 
     expect(current_path).to eq('/profile/edit')
 
-    expect(page).to have_selector("input[value='Gmoney']")
+    expect(page).to have_selector("input[value='Andy Dwyer']")
     expect(page).to have_selector("input[value='user@gmail.com']")
   end
 
@@ -66,7 +60,7 @@ RSpec.describe 'As a default user' do
     end
   end
 
-  it 'sees flash messages if fields are blank' do
+  it 'sees flash messages if fields are left blank' do
     visit '/profile/edit'
 
     fill_in :name, with: ''
