@@ -16,7 +16,7 @@
   <tbody>
     <% @orders.each_with_index do |order, index| %>
       <tr class="order-<%= index %>" id="order-<%= order.id %>">
-        <th scope="row"><%= link_to order.id, "/admin/users/#{order.user_id}/orders/#{order.id}" %></th>
+        <th scope="row"><%= link_to order.id, "/admin/users/#{order.user.id}/orders/#{order.id}" %></th>
         <td><%= order.created_at.strftime("%m/%d/%Y") %></td>
         <td><%= order.status.capitalize %></td>
         <th scope="row"><%= link_to "#{order.user.name}", "/admin/users/#{order.user.id}" %></th>
@@ -27,7 +27,7 @@
             <p class="inactive">Cancelled</p>
           <% elsif order.packaged? %>
             <p>Ready for Shipment</p>
-            <%= button_to 'Ship Order', "/admin/users/#{order.user_id}/orders/#{order.id}", method: :patch, class: 'btn btn-sm btn-success' %>
+            <%= button_to 'Ship Order', "/admin/users/#{order.user.id}/orders/#{order.id}", method: :patch, class: 'btn btn-sm btn-success' %>
           <% elsif order.shipped? %>
             <p class="active">Shipped</p>
           <% end %>
