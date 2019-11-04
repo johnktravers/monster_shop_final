@@ -78,6 +78,20 @@ module TestHelpers
   end
 
 
+  #----------------------- Merchant Admin Methods -----------------------#
+
+  def create_merchant_admin
+    @mike_admin = @mike.users.create!(name: 'Leslie Knope', email: 'mike.admin@gmail.com', password: 'password123', password_confirmation: 'password123', role: 2)
+  end
+
+  def login_as_merchant_admin
+    visit '/login'
+    fill_in :email, with: 'mike.admin@gmail.com'
+    fill_in :password, with: 'password123'
+    click_button 'Login'
+  end
+
+
   #----------------------- Cart Methods -----------------------#
 
   def add_item_to_cart(item)
