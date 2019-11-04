@@ -23,6 +23,13 @@
   </tbody>
 </table>
 
+<hr class="mt-5 mb-4">
+
+<h2 class="text-center mb-4 mt-5">Shipping Address</h2>
+<h6 class='text-center'><%= @order.address.address %></h6>
+<h6 class='text-center'><%= "#{@order.address.city}, #{@order.address.state} #{@order.address.zip}" %></h6>
+
+<hr class="mt-5 mb-4">
 
 <h2 class="text-center mb-4 mt-5">Item Details</h2>
 
