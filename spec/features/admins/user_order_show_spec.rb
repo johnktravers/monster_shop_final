@@ -1,28 +1,15 @@
 require 'rails_helper'
 
-RSpec.describe "Order show page" do
+RSpec.describe 'As an admin on a users order show page' do
   before :each do
-    @user = User.create!(name: "Brad Paisley", address: "123 Lincoln St", city: "Denver", state: "CO", zip: 23840, email: "user@gmail.com", password: "password123", password_confirmation: "password123")
-    @admin = User.create!(name: "Gmoney", address: "123 Lincoln St", city: "Denver", state: "CO", zip: 23840, email: "admin@gmail.com", password: "password123", password_confirmation: "password123", role: 3)
+    create_admin
+    create_user_with_addresses
+    create_merchants_and_items
+    create_orders
+    login_as_admin
+  end
 
-    @mike = Merchant.create(name: "Mike's Print Shop", address: '123 Paper Rd.', city: 'Denver', state: 'CO', zip: 80203)
-    @meg = Merchant.create(name: "Meg's Bike Shop", address: '123 Bike Rd.', city: 'Denver', state: 'CO', zip: 80203)
-    @tire = @meg.items.create(name: "Gatorskins", description: "They'll never pop!", price: 100, image: "https://www.rei.com/media/4e1f5b05-27ef-4267-bb9a-14e35935f218?size=784x588", inventory: 12)
-    @paper = @mike.items.create(name: "Lined Paper", description: "Great for writing on!", price: 20, image: "https://cdn.vertex42.com/WordTemplates/images/printable-lined-paper-wide-ruled.png", inventory: 3)
-    @pencil = @mike.items.create(name: "Yellow Pencil", description: "You can write on paper with it!", price: 2, image: "https://images-na.ssl-images-amazon.com/images/I/31BlVr01izL._SX425_.jpg", inventory: 100)
-
-    @order_1 = @user.orders.create!
-    @order_2 = @user.orders.create!
-    @order_1.item_orders.create!(item_id: @tire.id, price: @tire.price, quantity: 2)
-    @order_1.item_orders.create!(item_id: @paper.id, price: @paper.price, quantity: 1)
-    @order_2.item_orders.create!(item_id: @pencil.id, price: @pencil.price, quantity: 3)
-
-    visit '/login'
-    fill_in :email, with: 'admin@gmail.com'
-    fill_in :password, with: 'password123'
-    click_button 'Login'  end
-
-  it "shows order information" do
+  it 'can see order information' do
     visit "/admin/users/#{@user.id}/orders/#{@order_1.id}"
 
     within "#order-info" do
@@ -35,7 +22,7 @@ RSpec.describe "Order show page" do
     end
   end
 
-  it "shows item information" do
+  it 'can see information on each item ordered' do
     visit "/admin/users/#{@user.id}/orders/#{@order_1.id}"
 
     within "#item-#{@tire.id}" do
