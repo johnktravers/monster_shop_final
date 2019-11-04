@@ -2,7 +2,9 @@ require 'rails_helper'
 
 RSpec.describe 'As a default user on my orders index page', type: :feature do
   before :each do
-    create_user_with_orders
+    create_user_with_addresses
+    create_merchants_and_items
+    create_orders
     login_as_default_user
   end
 
