@@ -2,21 +2,15 @@ require 'rails_helper'
 
 RSpec.describe 'As a default user on my profile page' do
   before :each do
-    @user = User.create!(name: 'Gmoney', email: 'user@gmail.com', password: 'password123', password_confirmation: 'password123')
-    @address_1 = @user.addresses.create(nickname: 'Home', address: '123 Lincoln St', city: 'Denver', state: 'CO', zip: '23840')
-    @address_2 = @user.addresses.create(nickname: 'Work', address: '412 Broadway Blvd', city: 'Topeka', state: 'KS', zip: '34142')
-
-    visit '/login'
-    fill_in :email, with: 'user@gmail.com'
-    fill_in :password, with: 'password123'
-    click_button 'Login'
+    create_user_with_addresses
+    login_as_default_user
   end
 
   it 'can create a new address by clicking a link' do
     visit '/profile'
     click_link 'New Address'
 
-    expect(current_path).to eq("/profile/addresses/new")
+    expect(current_path).to eq('/profile/addresses/new')
 
     fill_in :nickname, with: 'Mountain Villa'
     fill_in :address, with: '132 Gold Ln'

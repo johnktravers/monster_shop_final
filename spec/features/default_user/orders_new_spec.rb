@@ -24,7 +24,8 @@ RSpec.describe("Order Creation") do
       click_button 'Add Item to Cart'
 
       @user = User.create!(name: "Gmoney", email: "test@gmail.com", password: "password123", password_confirmation: "password123")
-      @address = @user.addresses.create!(nickname: "Home", address: "123 Lincoln St", city: "Denver", state: "CO", zip: '23840')
+      @address_1 = @user.addresses.create!(nickname: "Home", address: "123 Lincoln St", city: "Denver", state: "CO", zip: '23840')
+      @address_2 = @user.addresses.create!(nickname: "Work", address: "43 S Broadway Blvd", city: "New York", state: "NY", zip: '34264')
 
       visit '/login'
       fill_in :email, with: 'test@gmail.com'
@@ -63,59 +64,60 @@ RSpec.describe("Order Creation") do
       expect(page).to have_content("Grand Total: $231.00")
     end
 
-    it 'shows a form to enter shipping information' do
-      expect(page).to have_field('Nickname')
-      expect(page).to have_field('Address')
-      expect(page).to have_field('City')
-      expect(page).to have_field('State')
-      expect(page).to have_field('zip')
+    it 'it shows the addresses I can choose for shipping' do
+      within "#address-#{@address_1.id}" do
+        expect(page).to have_content(@address_1.nickname)
+        expect(page).to have_content(@address_1.address)
+        expect(page).to have_content(@address_1.city)
+        expect(page).to have_content(@address_1.state)
+        expect(page).to have_content(@address_1.zip)
+        expect(page).to have_button('Ship to this Address')
+      end
 
-      expect(page).to have_button('Create Order')
+      within "#address-#{@address_2.id}" do
+        expect(page).to have_content(@address_2.nickname)
+        expect(page).to have_content(@address_2.address)
+        expect(page).to have_content(@address_2.city)
+        expect(page).to have_content(@address_2.state)
+        expect(page).to have_content(@address_2.zip)
+        expect(page).to have_button('Ship to this Address')
+      end
     end
 
-    it 'flashes messages and populates form for incomplete shipping info' do
-      fill_in 'Nickname', with: nil
-      fill_in 'Address',  with: '123 Burberry Ln'
-      fill_in 'City',     with: nil
-      fill_in 'State',    with: nil
-      fill_in 'zip',      with: '13552'
+    it 'can create an order by selecting an address' do
+      within "#address-#{@address_2.id}" do
+        click_button 'Ship to this Address'
+      end
 
-      click_button 'Create Order'
+      expect(current_path).to eq("/profile/orders")
+      expect(page).to have_content('Your order has been successfully created!')
 
-      expect(current_path).to eq('/profile/orders')
-      expect(page).to have_content("Nickname can't be blank")
-      expect(page).to have_content("City can't be blank")
-      expect(page).to have_content("State can't be blank")
+      order = Order.last
+      visit "/profile/orders/#{order.id}"
 
-      expect(page).to have_selector("input[value='123 Burberry Ln']")
-      expect(page).to have_selector("input[value='13552']")
+      expect(page).to have_content('43 S Broadway Blvd')
+      expect(page).to have_content('New York, NY 34264')
     end
 
     it 'empties the cart after an order is made' do
-      fill_in 'Nickname',    with: 'Joe Bob'
-      fill_in 'Address', with: '1331 17th Ave'
-      fill_in 'City',    with: 'Denver'
-      fill_in 'State',   with: 'Colorado'
-      fill_in 'zip',     with: '80202'
-
-      click_button 'Create Order'
+      within "#address-#{@address_2.id}" do
+        click_button 'Ship to this Address'
+      end
 
       within 'nav' do
         expect(page).to have_link('Cart (0)')
       end
     end
 
-    it 'redirects to profile orders page after creating order and shows flash message' do
-      fill_in 'Nickname', with: 'Joe Bob'
-      fill_in 'Address',  with: '1331 17th Ave'
-      fill_in 'City',     with: 'Denver'
-      fill_in 'State',    with: 'Colorado'
-      fill_in 'zip',      with: '80202'
+    it 'must create an address to place an order' do
+      Address.destroy_all
+      visit '/profile/orders/new'
 
-      click_button 'Create Order'
+      expect(page).to have_content('You must create an address to place an order')
 
-      expect(current_path).to eq("/profile/orders")
-      expect(page).to have_content('Your order has been successfully created!')
+      click_link('New Address')
+
+      expect(current_path).to eq('/profile/addresses/new')
     end
 
     # it 'cannot create an order without items', js: true do

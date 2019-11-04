@@ -6,8 +6,8 @@
   <h2 class="text-center mb-4 mt-4">Customer Information</h2>
   <h5 class="text-center"><%= @order.user.name %></h5>
   <h6 class="text-center">
-    <%= @order.user.address %><br>
-    <%= @order.user.city %>, <%= @order.user.state %> <%= @order.user.zip %>
+    <%= @order.address.address %><br>
+    <%= @order.address.city %>, <%= @order.address.state %> <%= @order.address.zip %>
   </h6>
 </section>
 

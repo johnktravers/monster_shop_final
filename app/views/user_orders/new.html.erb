@@ -38,38 +38,27 @@
   <h3 align="center">You are not authorized to create orders.</h3>
 <% end %>
 
-<hr class="m-4">
+<hr class="mt-5 mb-4">
 
-<h2 class="text-center m-4">Shipping Info</h2>
-<%= form_tag '/profile/orders' do %>
-  <section class='form-group form-width'>
-    <p>
-      <%= label_tag :nickname %>
-      <%= text_field_tag :nickname, @address.nickname, class: 'form-control', placeholder: 'Home, Work, etc.' %>
-    </p>
+<h2 class='text-center m-4'>Select Shipping Address</h2>
 
-    <p>
-      <%= label_tag :address %>
-      <%= text_field_tag :address, @address.address, class: 'form-control' %>
-    </p>
+<% if @user.addresses.any? %>
+  <section class="row justify-content-center">
+    <% @user.addresses.each do |address| %>
+      <article class='card card-body bg-light m-2 p-3 col-md-3' id= 'address-<%= address.id %>' >
+        <h4 class='text-center mb-3'><%= address.nickname.titleize %></h4>
+        <h6 class='text-center'><%= address.address %></h6>
+        <h6 class='text-center'><%= "#{address.city}, #{address.state} #{address.zip}" %></h6>
 
-    <p>
-      <%= label_tag :city %>
-      <%= text_field_tag :city, @address.city, class: 'form-control' %>
-    </p>
-
-    <p>
-      <%= label_tag :state %>
-      <%= text_field_tag :state, @address.state, class: 'form-control' %>
-    </p>
-
-    <p>
-      <%= label_tag :zip_code %>
-      <%= text_field_tag :zip, @address.zip, class: 'form-control' %>
-    </p>
-
-    <p class='justify-content-center row'>
-      <%= submit_tag 'Create Order', class: 'btn btn-success mt-2' %>
-    </p>
+        <article class="justify-content-center row mt-4">
+          <%= button_to 'Ship to this Address', "/profile/orders?address_id=#{address.id}", method: :post, class: 'btn btn-sm btn-success ml-2 mr-2' %>
+          <%= link_to 'Edit Address', "/profile/addresses/#{address.id}/edit", class: 'btn btn-sm btn-primary ml-2 mr-2' %>
+        </article>
+      </article>
+    <% end %>
   </section>
+<% else %>
+  <h3>You must create an address to place an order</h3>
 <% end %>
+
+<p align="center"><%= link_to "New Address", "/profile/addresses/new", class: 'btn btn-primary mt-3' %></p>

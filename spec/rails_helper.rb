@@ -69,3 +69,9 @@ RSpec.configure do |config|
     end
   end
 end
+
+require_relative './support/test_helpers'
+
+RSpec.configure do |config|
+  config.include TestHelpers
+end

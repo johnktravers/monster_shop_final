@@ -30,32 +30,26 @@ class UserOrdersController < ApplicationController
   end
 
   def new
-    @address = Address.new
+    @user = current_user
   end
 
   def create
-    address = current_user.addresses.new(address_params)
-    if address.save
-      order = address.orders.create!
-      if cart.contents.any? && order.save
-        cart.items.each do |item,quantity|
-          order.item_orders.create({
-            item: item,
-            quantity: quantity,
-            price: item.price
-            })
-        end
-        session.delete(:cart)
-        flash[:success] = ['Your order has been successfully created!']
-        redirect_to '/profile/orders'
-      else
-        flash[:error] = ["Please add something to your cart to place an order"]
-        redirect_to '/items'
+    address = current_user.addresses.find_by(id: params[:address_id])
+    order = address.orders.create
+    if cart.contents.any? && order.save
+      cart.items.each do |item,quantity|
+        order.item_orders.create({
+          item: item,
+          quantity: quantity,
+          price: item.price
+          })
       end
+      session.delete(:cart)
+      flash[:success] = ['Your order has been successfully created!']
+      redirect_to '/profile/orders'
     else
-      @address = Address.new(address_params)
-      flash.now[:error] = address.errors.full_messages
-      render :new
+      flash[:error] = ["Please add something to your cart to place an order"]
+      redirect_to '/items'
     end
   end
 
