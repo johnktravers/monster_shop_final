@@ -56,4 +56,10 @@ module TestHelpers
     click_button 'Login'
   end
 
+  #----------------------- Cart Methods -----------------------#
+
+  def add_item_to_cart(item)
+    visit "/items/#{item.id}"
+    click_on 'Add Item to Cart'
+  end
 end
