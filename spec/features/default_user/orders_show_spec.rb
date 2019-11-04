@@ -1,8 +1,10 @@
 require 'rails_helper'
 
-RSpec.describe "Order show page" do
+RSpec.describe 'Order show page' do
   before :each do
-    @user = User.create!(name: "Gmoney", address: "123 Lincoln St", city: "Denver", state: "CO", zip: 23840, email: "test@gmail.com", password: "password123", password_confirmation: "password123")
+    @user = User.create!(name: 'Gmoney', email: 'test@gmail.com', password: 'password123', password_confirmation: 'password123')
+    @address = @user.addresses.create!(nickname: 'Home', address: '123 Lincoln St', city: 'Denver', state: 'CO', zip: '23840')
+
     visit '/login'
     fill_in :email, with: 'test@gmail.com'
     fill_in :password, with: 'password123'
@@ -14,17 +16,17 @@ RSpec.describe "Order show page" do
     @paper = @mike.items.create(name: "Lined Paper", description: "Great for writing on!", price: 20, image: "https://cdn.vertex42.com/WordTemplates/images/printable-lined-paper-wide-ruled.png", inventory: 3)
     @pencil = @mike.items.create(name: "Yellow Pencil", description: "You can write on paper with it!", price: 2, image: "https://images-na.ssl-images-amazon.com/images/I/31BlVr01izL._SX425_.jpg", inventory: 100)
 
-    @order_1 = Order.create!(user_id: @user.id)
-    @order_2 = Order.create!(user_id: @user.id)
+    @order_1 = Order.create!(address_id: @address.id)
+    @order_2 = Order.create!(address_id: @address.id)
     @order_1.item_orders.create!(item_id: @tire.id, price: @tire.price, quantity: 2)
     @order_1.item_orders.create!(item_id: @paper.id, price: @paper.price, quantity: 1)
     @order_2.item_orders.create!(item_id: @pencil.id, price: @pencil.price, quantity: 3)
   end
 
-  it "shows order information" do
+  it 'shows order information' do
     visit "/profile/orders/#{@order_1.id}"
 
-    within "#order-info" do
+    within '#order-info' do
       expect(page).to have_content(@order_1.id)
       expect(page).to have_content(@order_1.created_at.strftime("%m/%d/%Y"))
       expect(page).to have_content(@order_1.updated_at.strftime("%m/%d/%Y"))
@@ -34,7 +36,14 @@ RSpec.describe "Order show page" do
     end
   end
 
-  it "shows item information" do
+  it 'shows shipping address' do
+    visit "/profile/orders/#{@order_1.id}"
+
+    expect(page).to have_content('123 Lincoln St')
+    expect(page).to have_content('Denver, CO 23840')
+  end
+
+  it 'shows item information only for items in the order' do
     visit "/profile/orders/#{@order_1.id}"
 
     within "#item-#{@tire.id}" do
