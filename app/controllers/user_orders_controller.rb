@@ -35,7 +35,7 @@ class UserOrdersController < ApplicationController
 
   def create
     address = current_user.addresses.find_by(id: params[:address_id])
-    order = address.orders.create
+    order = address.orders.new
     if cart.contents.any? && order.save
       cart.items.each do |item,quantity|
         order.item_orders.create({
