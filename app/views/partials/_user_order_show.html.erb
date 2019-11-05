@@ -40,7 +40,7 @@
 
       <% if @order.address_id == address.id %>
         <h6 class='active text-center mt-4'>Current Shipping Address</h6>
-      <% elsif @order.address_id != address.id && @order.pending? %>
+      <% elsif @order.address_id != address.id && @order.pending? && !current_admin? %>
         <article class="justify-content-center row mt-4">
           <%= button_to 'Ship to this Address', "/profile/orders/#{@order.id}?address_id=#{address.id}", method: :patch, class: 'btn btn-sm btn-success' %>
         </article>
@@ -49,7 +49,7 @@
   <% end %>
 </section>
 
-<% if @order.user.addresses.length == 1 %>
+<% if @order.user.addresses.length == 1 && !current_admin? %>
   <h6 class='text-center mt-4'>Please <%= link_to "create a new address", "/profile/addresses/new" %> in order to ship to a different address</h6>
 <% end %>
 
