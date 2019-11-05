@@ -45,7 +45,7 @@ RSpec.describe 'As an admin on a merchant dashboard page' do
   it 'can see a link to the merchants items' do
     visit "/admin/merchants/#{@mike.id}"
 
-    within('#merchant-info') { click_link 'My Items' }
+    within('#merchant-info') { click_link 'Merchant Items' }
 
     expect(current_path).to eq("/merchants/#{@mike.id}/items")
   end
