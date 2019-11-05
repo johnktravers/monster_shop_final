@@ -90,4 +90,42 @@ RSpec.describe 'As a merchant employee on my coupons page' do
     expect(page).to have_content('Name has already been taken')
     expect(page).to have_field(:name)
   end
+
+  it 'can edit an existing coupon if it has not been used' do
+    visit '/merchant/coupons'
+    within("#coupon-#{@coupon_1.id}") { click_link 'Edit Coupon' }
+
+    expect(current_path).to eq("/merchant/coupons/#{@coupon_1.id}/edit")
+
+    fill_in :name, with: 'Senior Discount'
+    fill_in :percent_off, with: 15
+    fill_in :dollar_off, with: ''
+    click_button 'Update Coupon'
+
+    expect(current_path).to eq('/merchant/coupons')
+    expect(page).to have_content('You have successfully updated your Senior Discount coupon!')
+
+    within "#coupon-#{@coupon_1.id}" do
+      expect(page).to have_content('Senior Discount')
+      expect(page).to_not have_content('Halloween Sale')
+      expect(page).to have_content('15% Off')
+      expect(page).to_not have_content('50% Off')
+    end
+  end
+
+  it 'cannot edit a coupon that does not exist' do
+    visit "/merchant/coupons/2512/edit"
+
+    expect(page).to have_content('The page you were looking for doesn\'t exist (404)')
+  end
+
+  it 'can delete an existing coupon if it has not been used' do
+    visit '/merchant/coupons'
+    within("#coupon-#{@coupon_1.id}") { click_button 'Delete Coupon' }
+
+    expect(current_path).to eq('/merchant/coupons')
+    expect(page).to have_content('You have successfully deleted your Halloween Sale coupon!')
+
+    expect(page).to_not have_css("#coupon-#{@coupon_1.id}")
+  end
 end
