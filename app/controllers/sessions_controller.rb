@@ -15,7 +15,7 @@ class SessionsController < ApplicationController
       redirect(user)
     else
       @user = User.new(email: params[:email])
-      flash[:error] = ["Sorry, credentials were invalid. Please try again."]
+      flash.now[:error] = ["Sorry, credentials were invalid. Please try again."]
       render :new
     end
   end
