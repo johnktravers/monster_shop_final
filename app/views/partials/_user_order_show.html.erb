@@ -25,13 +25,38 @@
 
 <hr class="mt-5 mb-4">
 
-<h2 class="text-center mb-4 mt-5">Shipping Address</h2>
-<h6 class='text-center'><%= @order.address.address %></h6>
-<h6 class='text-center'><%= "#{@order.address.city}, #{@order.address.state} #{@order.address.zip}" %></h6>
+<h2 class="text-center mb-4 mt-4">Shipping Address</h2>
+
+<section class="row justify-content-center">
+  <% @order.user.addresses.each do |address|%>
+    <% if @order.address_id == address.id %>
+      <article class='card card-body border-success bg-light m-2 p-3 col-md-3' id= 'address-<%= address.id %>'>
+    <% else %>
+      <article class='card card-body bg-light m-2 p-3 col-md-3' id= 'address-<%= address.id %>'>
+    <% end %>
+      <h4 class='text-center mb-3'><%= address.nickname.titleize %></h4>
+      <h6 class='text-center'><%= address.address %></h6>
+      <h6 class='text-center'><%= "#{address.city}, #{address.state} #{address.zip}" %></h6>
+
+      <% if @order.address_id == address.id %>
+        <h6 class='active text-center mt-4'>Current Shipping Address</h6>
+      <% elsif @order.address_id != address.id && @order.pending? %>
+        <article class="justify-content-center row mt-4">
+          <%= button_to 'Ship to this Address', "/profile/orders/#{@order.id}?address_id=#{address.id}", method: :patch, class: 'btn btn-sm btn-success' %>
+        </article>
+      <% end %>
+    </article>
+  <% end %>
+</section>
+
+<% if @order.user.addresses.length == 1 %>
+  <h6 class='text-center mt-4'>Please <%= link_to "create a new address", "/profile/addresses/new" %> in order to ship to a different address</h6>
+<% end %>
+
 
 <hr class="mt-5 mb-4">
 
-<h2 class="text-center mb-4 mt-5">Item Details</h2>
+<h2 class="text-center mb-4 mt-4">Item Details</h2>
 
   <table class="table table-striped table-bordered">
     <thead>
