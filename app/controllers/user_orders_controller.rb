@@ -16,17 +16,25 @@ class UserOrdersController < ApplicationController
 
   def update
     order = Order.find(params[:id])
-    order.update(status: 3)
-    order.item_orders.each do |item_order|
-      if item_order.fulfilled?
-        item = item_order.item
-        item.increase_inventory(item_order.quantity)
-        item.save
+    if params[:address_id]
+      address = current_user.addresses.find(params[:address_id])
+      if address && order.update(address_id: address.id)
+        flash[:success] = ["You have successfully updated your address for Order ##{order.id}!"]
+        redirect_to "/profile/orders/#{order.id}"
       end
-      item_order.update(status: 2)
+    else
+      order.update(status: 3)
+      order.item_orders.each do |item_order|
+        if item_order.fulfilled?
+          item = item_order.item
+          item.increase_inventory(item_order.quantity)
+          item.save
+        end
+        item_order.update(status: 2)
+      end
+      flash[:success] = ['Your order is now cancelled']
+      redirect_to '/profile'
     end
-    flash[:success] = ['Your order is now cancelled']
-    redirect_to '/profile'
   end
 
   def new
@@ -35,7 +43,7 @@ class UserOrdersController < ApplicationController
 
   def create
     address = current_user.addresses.find_by(id: params[:address_id])
-    order = address.orders.create
+    order = address.orders.new
     if cart.contents.any? && order.save
       cart.items.each do |item,quantity|
         order.item_orders.create({

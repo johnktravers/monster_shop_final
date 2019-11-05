@@ -13,7 +13,7 @@ module TestHelpers
     @address_1 = @user_1.addresses.create(nickname: 'Home', address: '123 Lincoln St', city: 'Denver', state: 'CO', zip: '23840')
 
     @user_2 = User.create!(name: 'April Ludgate', email: 'user.2@gmail.com', password: 'password123', password_confirmation: 'password123')
-    @address_2 = @user_2.addresses.create!(nickname: 'Home', address: "456 Jefferson Ave", city: "Orlando", state: "FL", zip: '32810')
+    @address_2 = @user_2.addresses.create!(nickname: 'Home', address: '456 Jefferson Ave', city: 'Orlando', state: 'FL', zip: '32810')
   end
 
   def create_merchants_and_items

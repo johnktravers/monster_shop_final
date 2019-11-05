@@ -52,13 +52,13 @@
 
         <article class="justify-content-center row mt-4">
           <%= button_to 'Ship to this Address', "/profile/orders?address_id=#{address.id}", method: :post, class: 'btn btn-sm btn-success ml-2 mr-2' %>
-          <%= link_to 'Edit Address', "/profile/addresses/#{address.id}/edit", class: 'btn btn-sm btn-primary ml-2 mr-2' %>
+          <%= link_to 'Edit Address', "/profile/addresses/#{address.id}/edit", class: 'btn btn-sm btn-info ml-2 mr-2' %>
         </article>
       </article>
     <% end %>
   </section>
 <% else %>
-  <h3>You must create an address to place an order</h3>
+  <h5 align="center">You must create an address to place an order</h5>
 <% end %>
 
 <p align="center"><%= link_to "New Address", "/profile/addresses/new", class: 'btn btn-primary mt-3' %></p>

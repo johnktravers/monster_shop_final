@@ -24,8 +24,48 @@ RSpec.describe 'As a default user on my order show page' do
   it 'can see the shipping address' do
     visit "/profile/orders/#{@order_1.id}"
 
-    expect(page).to have_content('123 Lincoln St')
-    expect(page).to have_content('Denver, CO 23840')
+    within "#address-#{@address_1.id}" do
+      expect(page).to have_content('123 Lincoln St')
+      expect(page).to have_content('Denver, CO 23840')
+      expect(page).to have_content('Current Shipping Address')
+      expect(page).to_not have_button('Ship to this Address')
+    end
+  end
+
+  it 'can change the shipping address if order is pending' do
+    visit "/profile/orders/#{@order_1.id}"
+    within("#address-#{@address_2.id}") { click_button 'Ship to this Address' }
+
+    expect(current_path).to eq("/profile/orders/#{@order_1.id}")
+    expect(page).to have_content("You have successfully updated your address for Order ##{@order_1.id}!")
+
+    within "#address-#{@address_2.id}" do
+      expect(page).to have_content('412 Broadway Blvd')
+      expect(page).to have_content('Topeka, KS 34142')
+      expect(page).to have_content('Current Shipping Address')
+      expect(page).to_not have_button('Ship to this Address')
+    end
+
+    within "#address-#{@address_1.id}" do
+      expect(page).to have_content('123 Lincoln St')
+      expect(page).to have_content('Denver, CO 23840')
+      expect(page).to have_button('Ship to this Address')
+      expect(page).to_not have_content('Current Shipping Address')
+    end
+  end
+
+  it 'can see a link to create an address if I have only one address' do
+    ItemOrder.where(order_id: @order_2.id).destroy_all
+    @order_2.destroy
+    @address_2.destroy
+
+    visit "/profile/orders/#{@order_1.id}"
+
+    expect(page).to_not have_content('Ship to this Address')
+    expect(page).to have_content('Please create a new address in order to ship to a different address')
+
+    click_link('create a new address')
+    expect(current_path).to eq('/profile/addresses/new')
   end
 
   it 'can see item information only for items in the order' do
