@@ -47,6 +47,13 @@ Rails.application.routes.draw do
     root  'dashboard#index'
     get   '/orders/:id',                                  to: 'orders#show'
     patch '/orders/:order_id/item_orders/:item_order_id', to: 'orders#update'
+
+    get    '/coupons',          to: 'coupons#index'
+    get    '/coupons/new',      to: 'coupons#new'
+    post   '/coupons',          to: 'coupons#create'
+    get    '/coupons/:id/edit', to: 'coupons#edit'
+    patch  '/coupons/:id',      to: 'coupons#update'
+    delete '/coupons/:id',      to: 'coupons#destroy'
   end
 
   namespace :admin do

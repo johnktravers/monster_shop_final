@@ -36,6 +36,14 @@ pine_oakio = Merchant.create(
   zip: '61350'
 )
 
+#---------------------------- Coupons ----------------------------#
+florist.coupons.create(name: 'Halloween Sale', percent_off: 50)
+florist.coupons.create(name: 'Member Discount', dollar_off: 10)
+florist.coupons.create(name: 'Happy Holidays', percent_off: 20)
+
+pine_oakio.coupons.create(name: 'Black Friday', percent_off: 75)
+pine_oakio.coupons.create(name: 'End of Season', dollar_off: 20)
+
 #---------------------------- Items ----------------------------#
 plumeria = Item.create(
   name: 'Plumeria Plant',
@@ -117,7 +125,7 @@ cynthia = User.create(
   password: "password",
   password_confirmation: "password"
 )
-cynthia.addresses.create!(
+cynthia.addresses.create(
   nickname: 'Home',
   address: '9247 E 42nd Avenue',
   city: 'Rochester',

@@ -1,0 +1,23 @@
+<h1 class="mt-4 mb-2">Coupons for <%=link_to @merchant.name, "/merchants/#{@merchant.id}" %></h1>
+
+<section class="row justify-content-center mt-4">
+  <% @merchant.coupons.each do |coupon|%>
+    <article class='card card-body bg-light m-2 p-3 col-md-3' id= 'coupon-<%= coupon.id %>' >
+      <h4 class='text-center mb-3'><%= coupon.name.titleize %></h4>
+      <% if coupon.percent_off %>
+        <h5 class='text-center'><%= "#{coupon.percent_off}% Off" %></h5>
+      <% elsif coupon.dollar_off %>
+        <h5 class='text-center'><%= "#{number_to_currency(coupon.dollar_off)} Off" %></h5>
+      <% end %>
+
+      <article class="justify-content-center row mt-4">
+        <%= link_to 'Edit Coupon', "/merchant/coupons/#{coupon.id}/edit", class: 'btn btn-sm btn-primary ml-2 mr-2' %>
+        <%= button_to 'Delete Coupon', "/merchant/coupons/#{coupon.id}", method: :delete, class: 'btn btn-sm btn-danger ml-2 mr-2' %>
+      </article>
+    </article>
+  <% end %>
+</section>
+
+<% if @merchant.coupons.length < 5 %>
+  <p align="center"><%= link_to "New Coupon", "/merchant/coupons/new", class: 'btn btn-success mt-3' %></p>
+<% end %>

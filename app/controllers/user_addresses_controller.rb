@@ -11,7 +11,7 @@ class UserAddressesController < ApplicationController
       flash[:success] = ['You have successfully added a new address!']
       redirect_to '/profile'
     else
-      flash[:error] = @address.errors.full_messages
+      flash.now[:error] = @address.errors.full_messages
       render :new
     end
   end
@@ -27,7 +27,7 @@ class UserAddressesController < ApplicationController
       flash[:success] = ['Your address has been successfully updated!']
       redirect_to '/profile'
     else
-      flash[:error] = address.errors.full_messages
+      flash.now[:error] = address.errors.full_messages
       @address = Address.new(address_params)
       render :edit
     end

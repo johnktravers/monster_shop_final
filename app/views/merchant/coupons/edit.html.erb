@@ -1,0 +1,11 @@
+<h1 class="mt-4 mb-3">Edit Coupon for <%=link_to @merchant.name, "/merchants/#{@merchant.id}" %></h1>
+
+<%= render partial: '/partials/coupon_form', locals:
+  {
+    path: "/merchant/coupons/#{@coupon.id}",
+    method: :patch,
+    name: @coupon.name,
+    percent_off: @coupon.percent_off,
+    dollar_off: @coupon.dollar_off,
+    button_text: 'Update Coupon'
+  } %>

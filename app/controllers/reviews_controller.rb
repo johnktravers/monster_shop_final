@@ -16,7 +16,7 @@ class ReviewsController<ApplicationController
         flash[:success] = ["Review successfully created"]
         redirect_to "/items/#{@item.id}"
       else
-        flash[:error] = ["Rating must be between 1 and 5"]
+        flash.now[:error] = ["Rating must be between 1 and 5"]
         render :new
       end
     end
