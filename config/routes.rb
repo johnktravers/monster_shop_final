@@ -4,10 +4,10 @@ Rails.application.routes.draw do
   root 'items#index'
 
   resources :merchants do
-    resources :items, only: [:index, :new, :create]
+    resources :items, only: [:index]
   end
 
-  resources :items, except: [:new, :create] do
+  resources :items, only: [:index, :show] do
     resources :reviews, only: [:new, :create]
   end
 
