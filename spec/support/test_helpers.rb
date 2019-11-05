@@ -98,4 +98,14 @@ module TestHelpers
     visit "/items/#{item.id}"
     click_on 'Add Item to Cart'
   end
+
+
+  #----------------------- Coupon Methods -----------------------#
+
+  def create_coupons(merchant)
+    @coupon_1 = merchant.coupons.create!(name: 'Halloween Sale', percent_off: 50)
+    @coupon_2 = merchant.coupons.create!(name: 'Member Discount', dollar_off: 10)
+    @coupon_3 = merchant.coupons.create!(name: 'Happy Holidays', percent_off: 20)
+  end
+
 end
