@@ -1,0 +1,13 @@
+<h1 class="mt-4 mb-2">Create Merchant</h1>
+
+<%= render partial: 'partials/merchant_form', locals:
+  {
+    path: '/admin/merchants',
+    method: :post,
+    name: @merchant.name,
+    address: @merchant.address,
+    city: @merchant.city,
+    state: @merchant.state,
+    zip: @merchant.zip,
+    button_text: 'Create Merchant'
+  } %>
