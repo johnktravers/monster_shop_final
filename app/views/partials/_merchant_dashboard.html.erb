@@ -13,7 +13,10 @@
       <p class='mr-2'><%= button_to "Delete Merchant", "/admin/merchants/#{@merchant.id}", method: :delete, class: 'btn btn-danger' if @merchant.orders.empty? %></p>
     </article>
   <% else %>
-    <p align="center"><%= link_to "My Items", merchant_items_path, class: 'btn btn-primary mt-4' %></p>
+    <article class='justify-content-center row mt-4'>
+      <p class='ml-2 mr-2'><%= link_to "My Items", merchant_items_path, class: 'btn btn-primary' %></p>
+      <p class='ml-2 mr-2'><%= link_to "My Coupons", "/merchant/coupons", class: 'btn btn-success' %></p>
+    </article>
   <% end %>
 </section>
 
