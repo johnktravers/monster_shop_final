@@ -54,7 +54,8 @@ RSpec.describe 'As a default user on my profile page' do
     expect(page).to have_selector("input[value='Aspen']")
   end
 
-  it 'can click a link to edit an address' do
+  it 'can click a link to edit an address if there are no shipped orders' do
+    @address_1.orders.create!
     visit '/profile'
     within("#address-#{@address_1.id}") { click_link 'Edit Address' }
 
@@ -106,8 +107,8 @@ RSpec.describe 'As a default user on my profile page' do
     expect(page).to_not have_css("#address-#{@address_1.id}")
   end
 
-  it 'cannot edit or delete an address that has orders' do
-    @address_1.orders.create!
+  it 'cannot edit an address that has shipped orders' do
+    @address_1.orders.create!(status: 2)
     visit '/profile'
 
     within "#address-#{@address_1.id}" do
