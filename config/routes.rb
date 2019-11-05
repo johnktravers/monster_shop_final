@@ -3,11 +3,11 @@ Rails.application.routes.draw do
 
   root 'items#index'
 
-  resources :merchants do
-    resources :items, only: [:index, :new, :create]
+  resources :merchants, only: [:index, :show] do
+    resources :items, only: [:index]
   end
 
-  resources :items, except: [:new, :create] do
+  resources :items, only: [:index, :show] do
     resources :reviews, only: [:new, :create]
   end
 
@@ -58,8 +58,12 @@ Rails.application.routes.draw do
     get   '/users/:user_id/orders/:order_id', to: 'user_orders#show'
     patch '/users/:user_id/orders/:order_id', to: 'user_orders#update'
 
-    get   '/merchants/:id', to: 'dashboard#merchant_index'
-    patch '/merchants/:id', to: 'merchants#update'
+    get    '/merchants/new',      to: 'merchants#new'
+    post   '/merchants',          to: 'merchants#create'
+    get    '/merchants/:id',      to: 'dashboard#merchant_index'
+    get    '/merchants/:id/edit', to: 'merchants#edit'
+    patch  '/merchants/:id',      to: 'merchants#update'
+    delete '/merchants/:id',      to: 'merchants#destroy'
 
     get   '/merchants/:merchant_id/orders/:order_id',                            to: 'merchant_orders#show'
     patch '/merchants/:merchant_id/orders/:order_id/item_orders/:item_order_id', to: 'merchant_orders#update'

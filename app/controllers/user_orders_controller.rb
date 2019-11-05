@@ -58,8 +58,4 @@ class UserOrdersController < ApplicationController
   def require_user
     render_404 unless current_user
   end
-
-  def address_params
-    params.permit(:nickname, :address, :city, :state, :zip)
-  end
 end

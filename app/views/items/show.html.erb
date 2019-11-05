@@ -30,8 +30,6 @@
 
 <section class='container-fluid justify-content-center d-flex mt-4'>
   <p><%= link_to 'Create Review', "/items/#{@item.id}/reviews/new", class: 'btn btn-secondary ml-2 mr-2' %></p>
-  <p><%= link_to "Edit Item", "/items/#{@item.id}/edit", class: 'btn btn-primary ml-2 mr-2' %></p>
-  <p><%= link_to "Delete Item", "/items/#{@item.id}", method: :delete, class: 'btn btn-danger ml-2 mr-2' if @item.no_orders? %></p>
 </section>
 
 <% if !@item.reviews.empty? %>
