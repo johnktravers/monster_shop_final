@@ -5,4 +5,8 @@ class Address < ApplicationRecord
 
   belongs_to :user
   has_many :orders
+
+  def shipped_orders
+    orders.where(status: 2)
+  end
 end
