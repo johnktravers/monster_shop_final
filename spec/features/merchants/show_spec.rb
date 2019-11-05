@@ -1,27 +1,24 @@
 require 'rails_helper'
 
-RSpec.describe 'merchant show page', type: :feature do
-  describe 'As a user' do
-    before :each do
-      @bike_shop = Merchant.create(name: "Brian's Bike Shop", address: '123 Bike Rd.', city: 'Richmond', state: 'VA', zip: 23137)
-    end
+RSpec.describe 'As a visitor on the merchant show page', type: :feature do
+  before :each do
+    create_merchants_and_items
+  end
 
-    it 'I can see a merchants name, address, city, state, zip' do
-      visit "/merchants/#{@bike_shop.id}"
+  it 'can see a merchants name, address, city, state, zip' do
+    visit "/merchants/#{@meg.id}"
 
-      expect(page).to have_content("Brian's Bike Shop")
-      expect(page).to have_content("123 Bike Rd. Richmond, VA 23137")
-    end
+    expect(page).to have_content("Meg's Bike Shop")
+    expect(page).to have_content('123 Bike Rd Denver, CO 80203')
+  end
 
-    it 'I can see a link to visit the merchant items' do
-      visit "/merchants/#{@bike_shop.id}"
+  it 'can see a link to visit the merchant items' do
+    visit "/merchants/#{@meg.id}"
 
-      expect(page).to have_link("All #{@bike_shop.name} Items")
+    expect(page).to have_link("All #{@meg.name} Items")
 
-      click_on "All #{@bike_shop.name} Items"
+    click_on "All #{@meg.name} Items"
 
-      expect(current_path).to eq("/merchants/#{@bike_shop.id}/items")
-    end
-
+    expect(current_path).to eq("/merchants/#{@meg.id}/items")
   end
 end
