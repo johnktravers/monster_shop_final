@@ -97,4 +97,44 @@ RSpec.describe 'As a default user on my order show page' do
 
     expect(page).to have_content('The page you were looking for doesn\'t exist (404)')
   end
+
+  it 'can see what coupon was used on the order if there is one' do
+    create_coupons(@mike)
+    order_3 = @address_1.orders.create(coupon_id: @coupon_1.id)
+    order_3.item_orders.create!(item_id: @tire.id, price: @tire.price, quantity: 3, status: 1)
+    order_3.item_orders.create!(item_id: @pencil.id, price: @pencil.price, quantity: 4, status: 1)
+    order_3.item_orders.create!(item_id: @paper.id, price: @paper.price, quantity: 1, status: 1)
+
+    visit "/profile/orders/#{order_3.id}"
+
+    expect(page).to have_content('Halloween Sale')
+    expect(page).to have_content('40% Off')
+  end
+
+  it 'can see subtotal and grand total differences from coupon' do
+    create_coupons(@mike)
+    order_3 = @address_1.orders.create(coupon_id: @coupon_1.id)
+    order_3.item_orders.create!(item_id: @tire.id, price: @tire.price, quantity: 3, status: 1)
+    order_3.item_orders.create!(item_id: @pencil.id, price: @pencil.price, quantity: 4, status: 1)
+    order_3.item_orders.create!(item_id: @paper.id, price: @paper.price, quantity: 1, status: 1)
+
+    visit "/profile/orders/#{order_3.id}"
+
+    within '#order-info' do
+      expect(page).to have_content('Full Price: $328.00')
+      expect(page).to have_content('Discounted: $316.80')
+    end
+
+    within "#item-#{@paper.id}" do
+      expect(page).to have_content("$20.00\n↓\n$12.00")
+    end
+
+    within "#item-#{@pencil.id}" do
+      expect(page).to have_content("$8.00\n↓\n$4.80")
+    end
+
+    within "#item-#{@tire.id}" do
+      expect(page).to_not have_content("$300.00\n↓\n$300.00")
+    end
+  end
 end
