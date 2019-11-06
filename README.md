@@ -3,13 +3,13 @@ BE Mod 2 Week 4/5 Group Project
 
 ## Installation Instructions
 
-This application is currently deployed to Heroku. Follow [this link](https://monster-shop-be-1908.herokuapp.com) to see it in action.
+This application is currently deployed to Heroku. Follow [this link](https://monster-shop-final-jtravers.herokuapp.com) to see it in action.
 
 If you would like to experience the web application on your local device, navigate to a directory within which you want to clone the repository and run these commands in the terminal.
 
 ```
-git clone git@github.com:grwthomps/monster_shop_1908.git monster_shop
-cd monster_shop
+git clone git@github.com:johnktravers/monster_shop_final.git
+cd monster_shop_final
 bundle install
 bundle update
 rake db:{drop,create,migrate,seed}
