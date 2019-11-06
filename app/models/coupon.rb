@@ -14,6 +14,7 @@ class Coupon < ApplicationRecord
 
   validate :percent_off_xor_dollar_off
   belongs_to :merchant
+  has_many :orders
 
 
   private
