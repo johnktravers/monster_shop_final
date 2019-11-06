@@ -9,7 +9,7 @@ class CartController < ApplicationController
   end
 
   def show
-    @items = cart.items
+    @items = Item.where(id: cart.items.keys.map(&:id))
   end
 
   def empty
@@ -34,6 +34,16 @@ class CartController < ApplicationController
     end
     redirect_to "/cart"
   end
+
+  def apply_coupon
+    coupon = Coupon.find_by(id: params[:coupon_id])
+    if coupon
+      session[:coupon_id] = coupon.id
+      flash[:success] = ["You have applied the #{coupon.name} coupon to your cart!"]
+      redirect_to '/cart'
+    end
+  end
+
 
   private
 
