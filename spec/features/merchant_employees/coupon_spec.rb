@@ -20,7 +20,7 @@ RSpec.describe 'As a merchant employee on my coupons page' do
 
     within "#coupon-#{@coupon_1.id}" do
       expect(page).to have_content('Halloween Sale')
-      expect(page).to have_content('50% Off')
+      expect(page).to have_content('40% Off')
     end
 
     within "#coupon-#{@coupon_2.id}" do
@@ -127,5 +127,17 @@ RSpec.describe 'As a merchant employee on my coupons page' do
     expect(page).to have_content('You have successfully deleted your Halloween Sale coupon!')
 
     expect(page).to_not have_css("#coupon-#{@coupon_1.id}")
+  end
+
+  it 'cannot edit or delete a coupon that has been used' do
+    create_user_with_addresses
+    @address_1.orders.create!(coupon_id: @coupon_1.id)
+
+    visit '/merchant/coupons'
+
+    within "#coupon-#{@coupon_1.id}" do
+      expect(page).to_not have_link('Edit Coupon')
+      expect(page).to_not have_button('Delete Coupon')
+    end
   end
 end
