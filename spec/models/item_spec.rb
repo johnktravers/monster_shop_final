@@ -100,6 +100,10 @@ describe Item, type: :model do
       @order.item_orders.create!(item_id: @pull_toy.id, price: @pull_toy.price, quantity: 4)
       @order.item_orders.create!(item_id: @dog_bone.id, price: @dog_bone.price, quantity: 3)
       @order.item_orders.create!(item_id: @helmet.id, price: @helmet.price, quantity: 2)
+
+      @coupon_1 = @meg.coupons.create(name: 'Halloween Sale', percent_off: 50)
+      @coupon_2 = @meg.coupons.create(name: 'Member Discount', dollar_off: 10)
+      @coupon_3 = @brian.coupons.create(name: 'Black Friday', percent_off: 75)
     end
 
     it "can return only active items" do
@@ -112,6 +116,10 @@ describe Item, type: :model do
 
     it 'can calculate five least popular items' do
       expect(Item.bottom_five_ordered).to eq([@helmet, @dog_bone, @pull_toy, @tire, @dog_bowl])
+    end
+
+    it 'can retrieve coupons available for a set of items' do
+      expect(Item.available_coupons).to eq([@coupon_1, @coupon_2, @coupon_3])
     end
   end
 end

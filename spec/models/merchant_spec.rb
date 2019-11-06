@@ -120,7 +120,7 @@ describe Merchant, type: :model do
       order_3.item_orders.create(item_id: @pull_toy.id, quantity: 2, price: 20)
       order_3.item_orders.create(item_id: @dog_bone.id, quantity: 1, price: 20)
 
-      expect(@meg.orders).to eq([order_1, order_2, order_3])
+      expect(@meg.orders).to contain_exactly(order_1, order_2, order_3)
     end
   end
 end

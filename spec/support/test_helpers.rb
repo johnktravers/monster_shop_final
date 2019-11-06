@@ -103,9 +103,10 @@ module TestHelpers
   #----------------------- Coupon Methods -----------------------#
 
   def create_coupons(merchant)
-    @coupon_1 = merchant.coupons.create!(name: 'Halloween Sale', percent_off: 50)
+    @coupon_1 = merchant.coupons.create!(name: 'Halloween Sale', percent_off: 40)
     @coupon_2 = merchant.coupons.create!(name: 'Member Discount', dollar_off: 10)
     @coupon_3 = merchant.coupons.create!(name: 'Happy Holidays', percent_off: 20)
+    @coupon_4 = merchant.coupons.create!(name: '4th of July Sale', dollar_off: 41)
   end
 
 end

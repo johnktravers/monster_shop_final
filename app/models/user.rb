@@ -15,4 +15,9 @@ class User < ApplicationRecord
   def orders
     Order.where(address_id: addresses.pluck(:id))
   end
+
+  def used_coupon?(coupon)
+    return true if orders.find_by(coupon_id: coupon.id)
+    false
+  end
 end

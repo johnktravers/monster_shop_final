@@ -21,7 +21,7 @@ RSpec.describe 'When I visit an order show page as a merchant employee' do
 
     within '#customer-info' do
       expect(page).to have_content('Andy Dwyer')
-      expect(page).to have_content('412 Broadway Blvd Topeka, KS 34142')
+      expect(page).to have_content("412 Broadway Blvd\nTopeka, KS 34142")
     end
 
     within "#item-#{@paper.id}" do
@@ -114,5 +114,18 @@ RSpec.describe 'When I visit an order show page as a merchant employee' do
 
     visit '/profile/orders'
     within("#order-#{order.id}") { expect(page).to have_content('Packaged') }
+  end
+
+  it 'can see what coupon was used on the order if there is one' do
+    create_coupons(@mike)
+    order_3 = @address_1.orders.create(coupon_id: @coupon_1.id)
+    order_3.item_orders.create!(item_id: @tire.id, price: @tire.price, quantity: 3, status: 1)
+    order_3.item_orders.create!(item_id: @pencil.id, price: @pencil.price, quantity: 4, status: 1)
+    order_3.item_orders.create!(item_id: @paper.id, price: @paper.price, quantity: 1, status: 1)
+
+    visit "/merchant/orders/#{order_3.id}"
+
+    expect(page).to have_content('Halloween Sale')
+    expect(page).to have_content('40% Off')
   end
 end

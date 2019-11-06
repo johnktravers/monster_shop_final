@@ -43,7 +43,7 @@ class UserOrdersController < ApplicationController
 
   def create
     address = current_user.addresses.find_by(id: params[:address_id])
-    order = address.orders.new
+    order = address.orders.new(coupon_id: session[:coupon_id])
     if cart.contents.any? && order.save
       cart.items.each do |item,quantity|
         order.item_orders.create({
@@ -53,6 +53,7 @@ class UserOrdersController < ApplicationController
           })
       end
       session.delete(:cart)
+      session.delete(:coupon_id)
       flash[:success] = ['Your order has been successfully created!']
       redirect_to '/profile/orders'
     else

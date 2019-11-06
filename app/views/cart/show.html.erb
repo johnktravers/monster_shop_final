@@ -12,7 +12,7 @@
       </tr>
     </thead>
     <tbody>
-      <% @items.each do |item,quantity| %>
+      <% cart.items.each do |item, quantity| %>
         <tr id= "cart-item-<%=item.id%>">
           <th scope="row">
             <span>
@@ -32,13 +32,59 @@
               <p><%= link_to "Remove", "/cart/#{item.id}",method: :delete, class: 'btn btn-outline-danger' %></p>
             </center>
           </td>
-          <td><%=number_to_currency(cart.subtotal(item))%></td>
+          <% if applied_coupon && applied_coupon.eligible_item(item) %>
+            <td>
+              <p>Full Price: <%= number_to_currency(cart.subtotal(item)) %></p>
+              <p class="active">Discounted: <%= number_to_currency(applied_coupon.discount_subtotals(cart.items)[item]) %></p>
+            </td>
+          <% else %>
+            <td><%= number_to_currency(cart.subtotal(item)) %></td>
+          <% end %>
         </tr>
       <% end %>
     </tbody>
   </table>
 
+  <% if @items.available_coupons.any? %>
+    <hr class="mt-5 mb-4">
+
+    <h2 class='text-center m-4'>Available Coupons</h2>
+
+    <section class="row justify-content-center mt-4">
+      <% @items.available_coupons.each do |coupon|%>
+        <% if applied_coupon && applied_coupon.id == coupon.id %>
+          <article class='card card-body bg-light border-success m-2 p-3 col-md-3' id= 'coupon-<%= coupon.id %>' >
+        <% else %>
+          <article class='card card-body bg-light m-2 p-3 col-md-3' id= 'coupon-<%= coupon.id %>' >
+        <% end %>
+          <h4 class='text-center mb-3'><%= coupon.name.titleize %></h4>
+          <% if coupon.percent_off %>
+            <h5 class='text-center'><%= "#{coupon.percent_off}% Off" %></h5>
+          <% elsif coupon.dollar_off %>
+            <h5 class='text-center'><%= "#{number_to_currency(coupon.dollar_off)} Off" %></h5>
+          <% end %>
+
+          <% if current_user && current_user.used_coupon?(coupon) %>
+            <h6 class='inactive text-center mt-4'>Already Used</h6>
+          <% elsif applied_coupon && applied_coupon.id == coupon.id %>
+            <h6 class='active text-center mt-4'>Currently Applied Coupon</h6>
+          <% else %>
+            <article class="justify-content-center row mt-4">
+              <%= button_to 'Apply Coupon', "/cart/#{coupon.id}", method: :patch, class: 'btn btn-sm btn-success' %></p>
+            </article>
+          <% end %>
+        </article>
+      <% end %>
+    </section>
+
+    <hr class="mt-5 mb-4">
+  <% end %>
+
   <h4 class="text-center">Grand Total: <%= number_to_currency(cart.total) %></h4>
+  <% if applied_coupon %>
+    <h4 class='active text-center mt-4'>Discounted Total: <%= number_to_currency(applied_coupon.discount_total(cart.items)) %></h4>
+  <% end %>
+
 
   <section class='container-fluid justify-content-center d-flex mt-4'>
     <p><%= link_to "Empty Cart", "/cart", method: :delete, class: 'btn btn-danger ml-2 mr-2' %></p>

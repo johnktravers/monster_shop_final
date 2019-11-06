@@ -1,17 +1,38 @@
 <h1 class="mt-4 mb-4">Order #<%= @order.id %></h1>
 
-<hr class="mt-4 mb-3">
+<hr class="mt-4 mb-4">
 
-<section id="customer-info">
-  <h2 class="text-center mb-4 mt-4">Customer Information</h2>
-  <h5 class="text-center"><%= @order.user.name %></h5>
-  <h6 class="text-center">
-    <%= @order.address.address %><br>
-    <%= @order.address.city %>, <%= @order.address.state %> <%= @order.address.zip %>
-  </h6>
+<h2 class="text-center mb-4 mt-4">Customer Information</h2>
+
+<section class="row justify-content-center" id='customer-info'>
+  <article class='card card-body border-success bg-light m-2 p-3 col-md-3'>
+    <h4 class='text-center mb-3'><%= @order.user.name %></h4>
+    <h6 class='text-center'><%= @order.address.address %></h6>
+    <h6 class='text-center'><%= "#{@order.address.city}, #{@order.address.state} #{@order.address.zip}" %></h6>
+  </article>
 </section>
 
-<hr class="mt-5">
+
+<% if @order.coupon %>
+  <hr class="mt-4 mb-4">
+
+  <h2 class='text-center m-4'>Coupon Used</h2>
+
+  <section class="row justify-content-center mt-4">
+    <article class='card card-body bg-light border-success m-2 p-3 col-md-3' id='coupon-<%= @order.coupon_id %>'>
+      <h4 class='text-center mb-3'><%= @order.coupon.name.titleize %></h4>
+      <% if @order.coupon.percent_off %>
+        <h5 class='text-center'><%= "#{@order.coupon.percent_off}% Off" %></h5>
+      <% elsif @order.coupon.dollar_off %>
+        <h5 class='text-center'><%= "#{number_to_currency(@order.coupon.dollar_off)} Off" %></h5>
+      <% end %>
+    </article>
+  </section>
+
+<% end %>
+
+
+<hr class="mt-4 mb-4">
 
 <h2 class="text-center mb-4 mt-4">Item Details</h2>
 

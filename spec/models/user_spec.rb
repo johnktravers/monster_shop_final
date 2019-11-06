@@ -69,5 +69,17 @@ RSpec.describe User, type: :model do
 
       expect(user.orders).to eq([order_1, order_2, order_3])
     end
+
+    it 'can see if a user has used a coupon' do
+      create_user_with_addresses
+      create_merchants_and_items
+      create_coupons(@mike)
+
+      expect(@user.used_coupon?(@coupon_1)).to eq(false)
+
+      @address_1.orders.create(coupon_id: @coupon_1.id)
+
+      expect(@user.used_coupon?(@coupon_1)).to eq(true)
+    end
   end
 end

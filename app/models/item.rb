@@ -37,11 +37,11 @@ class Item <ApplicationRecord
   end
 
   def self.top_five_ordered
-    joins(:item_orders).group('items.id').order('sum(item_orders.quantity) DESC').limit(5)
+    joins(:item_orders).group(:id).order('sum(item_orders.quantity) DESC').limit(5)
   end
 
   def self.bottom_five_ordered
-    joins(:item_orders).group('items.id').order('sum(item_orders.quantity)').limit(5)
+    joins(:item_orders).group(:id).order('sum(item_orders.quantity)').limit(5)
   end
 
   def reduce_inventory(quantity)
@@ -50,5 +50,9 @@ class Item <ApplicationRecord
 
   def increase_inventory(quantity)
     self.inventory += quantity
+  end
+
+  def self.available_coupons
+    Coupon.where(merchant_id: distinct.pluck(:merchant_id))
   end
 end

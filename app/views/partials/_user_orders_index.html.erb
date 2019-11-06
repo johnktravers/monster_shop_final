@@ -19,7 +19,11 @@
         <td><%= order.updated_at.strftime("%m/%d/%Y") %></td>
         <td><%= order.status.capitalize %></td>
         <td><%= order.item_orders.count %></td>
-        <td><%= number_to_currency(order.grandtotal) %></td>
+        <% if order.coupon_id %>
+          <td class="active"><%= number_to_currency(order.coupon.discount_total(order)) %></td>
+        <% else %>
+          <td><%= number_to_currency(order.grandtotal) %></td>
+        <% end %>
       </tr>
     <% end %>
   </tbody>

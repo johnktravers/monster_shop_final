@@ -1,10 +1,10 @@
 require 'rails_helper'
 
-RSpec.describe 'As a merchant employee on my coupons page' do
+RSpec.describe 'As a merchant admin on my coupons page' do
   before :each do
     create_merchants_and_items
-    create_merchant_employees
-    login_as_mikes_employee
+    create_merchant_admin
+    login_as_merchant_admin
     create_coupons(@mike)
   end
 
@@ -78,19 +78,6 @@ RSpec.describe 'As a merchant employee on my coupons page' do
     expect(page).to have_field(:name)
   end
 
-  it 'sees a flash message if name is not unique' do
-    visit '/merchant/coupons/new'
-
-    fill_in :name, with: 'Happy Holidays'
-    fill_in :percent_off, with: ''
-    fill_in :dollar_off, with: 24
-    click_button 'Create Coupon'
-
-    expect(current_path).to eq('/merchant/coupons')
-    expect(page).to have_content('Name has already been taken')
-    expect(page).to have_field(:name)
-  end
-
   it 'can edit an existing coupon if it has not been used' do
     visit '/merchant/coupons'
     within("#coupon-#{@coupon_1.id}") { click_link 'Edit Coupon' }
@@ -111,6 +98,19 @@ RSpec.describe 'As a merchant employee on my coupons page' do
       expect(page).to have_content('15% Off')
       expect(page).to_not have_content('50% Off')
     end
+  end
+
+  it 'sees a flash message if name is not unique' do
+    visit "/merchant/coupons/#{@coupon_1.id}/edit"
+
+    fill_in :name, with: 'Happy Holidays'
+    fill_in :percent_off, with: ''
+    fill_in :dollar_off, with: 24
+    click_button 'Update Coupon'
+
+    expect(current_path).to eq("/merchant/coupons/#{@coupon_1.id}")
+    expect(page).to have_content('Name has already been taken')
+    expect(page).to have_field(:name)
   end
 
   it 'cannot edit a coupon that does not exist' do
