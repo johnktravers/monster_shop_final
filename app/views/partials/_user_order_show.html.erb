@@ -18,7 +18,14 @@
       <td><%= @order.updated_at.strftime("%m/%d/%Y") %></td>
       <td><%= @order.status.capitalize %></td>
       <td><%= @order.total_item_quantity %></td>
-      <td><%= number_to_currency(@order.grandtotal) %></td>
+      <% if @order.coupon %>
+        <td>
+          <p>Full Price: <%= number_to_currency(@order.grandtotal) %></p>
+          <p class="active">Discounted: <%= number_to_currency(@order.coupon.discount_total(@order)) %></p>
+        </td>
+      <% else %>
+        <td><%= number_to_currency(@order.grandtotal) %></td>
+      <% end %>
     </tr>
   </tbody>
 </table>
@@ -53,6 +60,24 @@
   <h6 class='text-center mt-4'>Please <%= link_to "create a new address", "/profile/addresses/new" %> in order to ship to a different address</h6>
 <% end %>
 
+<% if @order.coupon %>
+  <hr class="mt-5 mb-4">
+
+  <h2 class='text-center m-4'>Coupon Used</h2>
+
+  <section class="row justify-content-center mt-4">
+    <article class='card card-body bg-light border-success m-2 p-3 col-md-3' id='coupon-<%= @order.coupon_id %>'>
+      <h4 class='text-center mb-3'><%= @order.coupon.name.titleize %></h4>
+      <% if @order.coupon.percent_off %>
+        <h5 class='text-center'><%= "#{@order.coupon.percent_off}% Off" %></h5>
+      <% elsif @order.coupon.dollar_off %>
+        <h5 class='text-center'><%= "#{number_to_currency(@order.coupon.dollar_off)} Off" %></h5>
+      <% end %>
+    </article>
+  </section>
+
+<% end %>
+
 
 <hr class="mt-5 mb-4">
 
@@ -79,7 +104,15 @@
         <td align='center'><%= image_tag item_order.item.image%> </td>
         <td><%= number_to_currency(item_order.price)%></td>
         <td><%= item_order.quantity%></td>
-        <td><%= number_to_currency(item_order.subtotal)%></td>
+        <% if @order.coupon && @order.coupon.eligible_item(item_order.item) %>
+          <td align='center'>
+            <p><%= number_to_currency(item_order.subtotal) %>
+            <p class='active'>↓</p>
+            <p class="active"><%= number_to_currency(@order.coupon.discount_subtotals(@order)[item_order.item])%></p>
+          </td>
+        <% else %>
+          <td><%= number_to_currency(item_order.subtotal) %></td>
+        <% end %>
         </section>
       </tr>
       <% end %>
