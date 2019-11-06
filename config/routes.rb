@@ -43,35 +43,26 @@ Rails.application.routes.draw do
   get  '/logout', to: 'sessions#destroy'
 
   namespace :merchant do
-    resources :items, except: [:show]
+    resources :items, except: :show
+    resources :coupons, except: :show
 
     root  'dashboard#index'
     get   '/orders/:id',                                  to: 'orders#show'
     patch '/orders/:order_id/item_orders/:item_order_id', to: 'orders#update'
-
-    get    '/coupons',          to: 'coupons#index'
-    get    '/coupons/new',      to: 'coupons#new'
-    post   '/coupons',          to: 'coupons#create'
-    get    '/coupons/:id/edit', to: 'coupons#edit'
-    patch  '/coupons/:id',      to: 'coupons#update'
-    delete '/coupons/:id',      to: 'coupons#destroy'
   end
 
   namespace :admin do
-    resources :users, only: [:index, :show]
-
     root 'dashboard#index'
+
+    resources :users, only: [:index, :show]
 
     get   '/users/:id/orders',                to: 'user_orders#index'
     get   '/users/:user_id/orders/:order_id', to: 'user_orders#show'
     patch '/users/:user_id/orders/:order_id', to: 'user_orders#update'
 
-    get    '/merchants/new',      to: 'merchants#new'
-    post   '/merchants',          to: 'merchants#create'
+    resources :merchants, except: [:index, :show]
+
     get    '/merchants/:id',      to: 'dashboard#merchant_index'
-    get    '/merchants/:id/edit', to: 'merchants#edit'
-    patch  '/merchants/:id',      to: 'merchants#update'
-    delete '/merchants/:id',      to: 'merchants#destroy'
 
     get   '/merchants/:merchant_id/orders/:order_id',                            to: 'merchant_orders#show'
     patch '/merchants/:merchant_id/orders/:order_id/item_orders/:item_order_id', to: 'merchant_orders#update'
