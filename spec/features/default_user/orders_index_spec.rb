@@ -37,4 +37,19 @@ RSpec.describe 'As a default user on my orders index page', type: :feature do
 
     expect(current_path).to eq("/profile/orders/#{@order_1.id}")
   end
+
+  it 'shows the discounted grand total if a coupon code was used' do
+    create_coupons(@mike)
+    order_3 = @address_1.orders.create(coupon_id: @coupon_1.id)
+    order_3.item_orders.create!(item_id: @tire.id, price: @tire.price, quantity: 3, status: 1)
+    order_3.item_orders.create!(item_id: @pencil.id, price: @pencil.price, quantity: 4, status: 1)
+    order_3.item_orders.create!(item_id: @paper.id, price: @paper.price, quantity: 1, status: 1)
+
+    visit '/profile/orders'
+
+    within "#order-#{order_3.id}" do
+      expect(page).to have_content('$316.80')
+      expect(page).to_not have_content('$328.00')
+    end
+  end
 end
