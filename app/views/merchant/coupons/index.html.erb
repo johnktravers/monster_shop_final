@@ -10,10 +10,12 @@
         <h5 class='text-center'><%= "#{number_to_currency(coupon.dollar_off)} Off" %></h5>
       <% end %>
 
-      <article class="justify-content-center row mt-4">
-        <%= link_to 'Edit Coupon', "/merchant/coupons/#{coupon.id}/edit", class: 'btn btn-sm btn-primary ml-2 mr-2' %>
-        <%= button_to 'Delete Coupon', "/merchant/coupons/#{coupon.id}", method: :delete, class: 'btn btn-sm btn-danger ml-2 mr-2' %>
-      </article>
+      <% if coupon.orders.empty? %>
+        <article class="justify-content-center row mt-4">
+          <%= link_to 'Edit Coupon', "/merchant/coupons/#{coupon.id}/edit", class: 'btn btn-sm btn-primary ml-2 mr-2' %>
+          <%= button_to 'Delete Coupon', "/merchant/coupons/#{coupon.id}", method: :delete, class: 'btn btn-sm btn-danger ml-2 mr-2' %>
+        </article>
+      <% end %>
     </article>
   <% end %>
 </section>
