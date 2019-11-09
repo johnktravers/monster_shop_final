@@ -11,10 +11,10 @@ RSpec.describe 'As an admin on the users index page', type: :feature do
   end
 
   it 'can see all users and their roles' do
-    visit '/'
+    visit root_path
     click_link 'Users'
 
-    expect(current_path).to eq('/admin/users')
+    expect(current_path).to eq(admin_users_path)
 
     within "#user-#{@user_1.id}" do
       expect(page).to have_link(@user_1.name)
@@ -42,7 +42,7 @@ RSpec.describe 'As an admin on the users index page', type: :feature do
   end
 
   it 'can click on a users name to go to the admin user show page' do
-    visit '/admin/users'
+    visit admin_users_path
 
     click_link @user_1.name
 

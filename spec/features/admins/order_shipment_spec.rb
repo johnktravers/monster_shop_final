@@ -10,7 +10,7 @@ RSpec.describe 'Admin order shipment' do
   end
 
   it 'can see packaged orders that are ready to ship' do
-    visit '/admin'
+    visit admin_root_path
 
     within "#order-#{@order_1.id}" do
       expect(page).to have_content('Not Ready for Shipment')
@@ -24,16 +24,16 @@ RSpec.describe 'Admin order shipment' do
   end
 
   it 'can click a button to ship packaged orders' do
-    visit '/admin'
+    visit admin_root_path
 
     within("#order-#{@order_2.id}") { click_button('Ship Order') }
 
-    expect(current_path).to eq('/admin')
+    expect(current_path).to eq(admin_root_path)
     within("#order-#{@order_2.id}") { expect(page).to have_content('Shipped') }
   end
 
   it 'a user cannot cancel an order after it has been shipped' do
-    visit '/admin'
+    visit admin_root_path
     within("#order-#{@order_2.id}") { click_button('Ship Order') }
     click_link 'Logout'
 

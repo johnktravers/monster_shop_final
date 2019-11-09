@@ -2,10 +2,10 @@ require 'rails_helper'
 
 RSpec.describe 'User registration' do
   it 'can create a new user by filling out a form' do
-    visit '/'
+    visit root_path
     click_on 'Register'
 
-    expect(current_path).to eq('/register')
+    expect(current_path).to eq(register_path)
 
     fill_in :name, with: 'Cowboy Joe'
     fill_in :email, with: 'CowboyJoe@gmail.com'
@@ -14,12 +14,12 @@ RSpec.describe 'User registration' do
 
     click_button 'Create User'
 
-    expect(current_path).to eq('/profile')
+    expect(current_path).to eq(profile_path)
     expect(page).to have_content('Congratulations Cowboy Joe, you have registered and are now logged in!')
   end
 
   it 'keeps a user logged in after registering' do
-    visit '/register'
+    visit register_path
 
     fill_in :name, with: 'Cowboy Joe'
     fill_in :email, with: 'CowboyJoe@gmail.com'
@@ -27,13 +27,13 @@ RSpec.describe 'User registration' do
     fill_in :password_confirmation, with: 'YeeHaw123'
 
     click_button 'Create User'
-    visit '/profile'
+    visit profile_path
 
     expect(page).to have_content('Hello, Cowboy Joe')
   end
 
   it 'shows flash message when missing fields' do
-    visit '/register'
+    visit register_path
 
     click_button 'Create User'
 
@@ -44,7 +44,7 @@ RSpec.describe 'User registration' do
   end
 
   it 'shows flash message when passwords dont match' do
-    visit '/register'
+    visit register_path
 
     fill_in :password, with: 'Booya'
     fill_in :password_confirmation, with: 'Hello'
@@ -58,7 +58,7 @@ RSpec.describe 'User registration' do
   it 'prepopulates form fields after error message that email is not unique' do
     User.create(name: 'Gmoney', email: 'user@gmail.com', password: 'password123', password_confirmation: 'password123')
 
-    visit '/register'
+    visit register_path
 
     fill_in :name, with: 'Cowboy Joe'
     fill_in :email, with: 'user@gmail.com'

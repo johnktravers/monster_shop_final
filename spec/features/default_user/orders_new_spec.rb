@@ -162,7 +162,7 @@ RSpec.describe 'As a default user creating a new order' do
   #
   #   click_on 'Checkout'
   #
-  #   expect(current_path).to eq('/items')
+  #   expect(current_path).to eq(items_path)
   #   expect(page).to have_content("Please add something to your cart to place an order")
   # end
 end

@@ -7,9 +7,9 @@ RSpec.describe 'Admin logout' do
   end
 
   it 'can log out by going to logout path' do
-    visit '/logout'
+    visit logout_path
 
-    expect(current_path).to eq('/')
+    expect(current_path).to eq(root_path)
     expect(page).to have_content('Ron Swanson, you have logged out!')
 
     within 'nav' do
@@ -22,7 +22,7 @@ RSpec.describe 'Admin logout' do
   it 'can log out by clicking logout button in navbar' do
     within('nav') { click_link('Logout') }
 
-    expect(current_path).to eq('/')
+    expect(current_path).to eq(root_path)
     expect(page).to have_content('Ron Swanson, you have logged out!')
 
     within 'nav' do

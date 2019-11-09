@@ -9,7 +9,7 @@ RSpec.describe 'As a merchant admin on my coupons page' do
   end
 
   it 'can click a link to merchant coupons index from merchant dashboard' do
-    visit '/merchant'
+    visit merchant_root_path
     click_link 'My Coupons'
 
     expect(current_path).to eq('/merchant/coupons')

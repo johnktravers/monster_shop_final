@@ -21,7 +21,7 @@ class Admin::MerchantsController < Admin::BaseController
     merchant = Merchant.find(params[:id])
     merchant.destroy
     flash[:success] = ["You have successfully deleted #{merchant.name}"]
-    redirect_to '/merchants'
+    redirect_to merchants_path
   end
 
   def update
@@ -37,7 +37,7 @@ class Admin::MerchantsController < Admin::BaseController
       else
         flash[:success] = ["#{@merchant.name} has been disabled"]
       end
-      redirect_to '/merchants'
+      redirect_to merchants_path
     else
       @merchant.update(merchant_params)
       if @merchant.save

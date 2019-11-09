@@ -13,7 +13,7 @@ RSpec.describe 'As a default user on my order show page' do
 
     click_button 'Cancel Order'
 
-    expect(current_path).to eq('/profile')
+    expect(current_path).to eq(profile_path)
 
     order = Order.first
 

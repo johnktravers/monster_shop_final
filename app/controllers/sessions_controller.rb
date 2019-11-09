@@ -24,14 +24,14 @@ class SessionsController < ApplicationController
     user = current_user
     reset_session
     flash[:success] = ["#{user.name}, you have logged out!"]
-    redirect_to '/'
+    redirect_to root_path
   end
 
   private
 
   def redirect(user)
-    redirect_to '/profile' if user.default?
-    redirect_to '/merchant' if user.merchant_employee? || user.merchant_admin?
-    redirect_to '/admin' if user.admin?
+    redirect_to profile_path if user.default?
+    redirect_to merchant_root_path if user.merchant_employee? || user.merchant_admin?
+    redirect_to admin_root_path if user.admin?
   end
 end

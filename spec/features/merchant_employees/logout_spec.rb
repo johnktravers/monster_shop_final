@@ -8,9 +8,9 @@ RSpec.describe 'Merchant employee logout' do
   end
 
   it 'can log out by going to logout path' do
-    visit '/logout'
+    visit logout_path
 
-    expect(current_path).to eq('/')
+    expect(current_path).to eq(root_path)
     expect(page).to have_content('April Ludgate, you have logged out!')
 
     within 'nav' do
@@ -23,7 +23,7 @@ RSpec.describe 'Merchant employee logout' do
   it 'can log out by clicking logout button in navbar' do
     within('nav') { click_link('Logout') }
 
-    expect(current_path).to eq('/')
+    expect(current_path).to eq(root_path)
     expect(page).to have_content('April Ludgate, you have logged out!')
 
     within 'nav' do
@@ -42,7 +42,7 @@ RSpec.describe 'Merchant employee logout' do
 
     within('nav') { expect(page).to have_link('Cart (1)') }
 
-    visit '/logout'
+    visit logout_path
 
     within('nav') { expect(page).to have_link('Cart (0)') }
   end

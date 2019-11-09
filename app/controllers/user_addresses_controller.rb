@@ -9,7 +9,7 @@ class UserAddressesController < ApplicationController
     @address = current_user.addresses.new(address_params)
     if @address.save
       flash[:success] = ['You have successfully added a new address!']
-      redirect_to '/profile'
+      redirect_to profile_path
     else
       flash.now[:error] = @address.errors.full_messages
       render :new
@@ -25,7 +25,7 @@ class UserAddressesController < ApplicationController
     address = current_user.addresses.find_by(id: params[:id])
     if address && address.update(address_params)
       flash[:success] = ['Your address has been successfully updated!']
-      redirect_to '/profile'
+      redirect_to profile_path
     else
       flash.now[:error] = address.errors.full_messages
       @address = Address.new(address_params)
@@ -38,7 +38,7 @@ class UserAddressesController < ApplicationController
     if address && address.orders.empty?
       address.destroy
       flash[:success] = ['Your address has been successfully deleted!']
-      redirect_to '/profile'
+      redirect_to profile_path
     end
   end
 

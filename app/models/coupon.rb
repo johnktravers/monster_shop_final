@@ -44,16 +44,16 @@ class Coupon < ApplicationRecord
     subtotals
   end
 
-  def discount_subtotals(cart)
-    if cart.class == Order
-      subtotals = order_subtotals(cart)
+  def discount_subtotals(cart_or_order)
+    if cart_or_order.class == Order
+      subtotals = order_subtotals(cart_or_order)
     else
-      subtotals = cart_subtotals(cart)
+      subtotals = cart_subtotals(cart_or_order)
     end
 
     dollar_discount = dollar_off if dollar_off
 
-    eligible_items(cart).each do |item|
+    eligible_items(cart_or_order).each do |item|
       if percent_off
         subtotals[item] -= subtotals[item] * percent_off / 100
       else

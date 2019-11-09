@@ -33,7 +33,7 @@ class UserOrdersController < ApplicationController
         item_order.update(status: 2)
       end
       flash[:success] = ['Your order is now cancelled']
-      redirect_to '/profile'
+      redirect_to profile_path
     end
   end
 

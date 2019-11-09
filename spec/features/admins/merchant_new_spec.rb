@@ -7,7 +7,7 @@ RSpec.describe 'As an admin on the new merchant page', type: :feature do
   end
 
   it 'can create a new merchant by filling in the form' do
-    visit '/merchants'
+    visit merchants_path
     click_link 'New Merchant'
 
     expect(current_path).to eq('/admin/merchants/new')

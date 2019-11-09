@@ -7,28 +7,28 @@ RSpec.describe 'As an admin' do
   end
 
   it 'can see a nav bar with links to all pages' do
-    visit '/merchants'
+    visit merchants_path
 
     within('nav') { click_link 'Home' }
-    expect(current_path).to eq('/')
+    expect(current_path).to eq(root_path)
 
     within('nav') { click_link 'Items' }
-    expect(current_path).to eq('/items')
+    expect(current_path).to eq(items_path)
 
     within('nav') { click_link 'Merchants' }
-    expect(current_path).to eq('/merchants')
+    expect(current_path).to eq(merchants_path)
 
     within('nav') { click_link 'Profile' }
-    expect(current_path).to eq('/profile')
+    expect(current_path).to eq(profile_path)
 
     within('nav') { click_link 'Dashboard' }
-    expect(current_path).to eq('/admin')
+    expect(current_path).to eq(admin_root_path)
 
     within('nav') { click_link 'Users' }
-    expect(current_path).to eq('/admin/users')
+    expect(current_path).to eq(admin_users_path)
 
     within('nav') { click_link 'Logout' }
-    expect(current_path).to eq('/')
+    expect(current_path).to eq(root_path)
   end
 
   it 'cannot see links Im not authorized for' do
@@ -48,7 +48,7 @@ RSpec.describe 'As an admin' do
   end
 
   it 'cannot access certain paths' do
-    visit '/merchant'
+    visit merchant_root_path
     expect(page).to have_content('The page you were looking for doesn\'t exist (404)')
 
     visit '/cart'

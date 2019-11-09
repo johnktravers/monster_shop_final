@@ -8,15 +8,15 @@ RSpec.describe 'Admin login' do
   it 'can login with valid credentials' do
     login_as_admin
 
-    expect(current_path).to eq('/admin')
+    expect(current_path).to eq(admin_root_path)
     expect(page).to have_content("#{@admin.name}, you have successfully logged in.")
   end
 
   it 'redirects to admin dashboard from login path if logged in' do
     login_as_admin
-    visit '/login'
+    visit login_path
 
-    expect(current_path).to eq('/admin')
+    expect(current_path).to eq(admin_root_path)
     expect(page).to have_content('Sorry, you are already logged in.')
   end
 end
