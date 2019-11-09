@@ -7,7 +7,7 @@ RSpec.describe 'As a default user on my profile page' do
   end
 
   it 'can create a new address by clicking a link' do
-    visit '/profile'
+    visit profile_path
     click_link 'New Address'
 
     expect(current_path).to eq('/profile/addresses/new')
@@ -22,7 +22,7 @@ RSpec.describe 'As a default user on my profile page' do
 
     address = Address.last
 
-    expect(current_path).to eq('/profile')
+    expect(current_path).to eq(profile_path)
     expect(page).to have_content('You have successfully added a new address!')
 
     within "#address-#{address.id}" do
@@ -56,7 +56,7 @@ RSpec.describe 'As a default user on my profile page' do
 
   it 'can click a link to edit an address if there are no shipped orders' do
     @address_1.orders.create!
-    visit '/profile'
+    visit profile_path
     within("#address-#{@address_1.id}") { click_link 'Edit Address' }
 
     expect(current_path).to eq("/profile/addresses/#{@address_1.id}/edit")
@@ -69,7 +69,7 @@ RSpec.describe 'As a default user on my profile page' do
 
     click_button 'Update Address'
 
-    expect(current_path).to eq('/profile')
+    expect(current_path).to eq(profile_path)
 
     within "#address-#{@address_1.id}" do
       expect(page).to have_content('Mountain Villa')
@@ -99,17 +99,17 @@ RSpec.describe 'As a default user on my profile page' do
   end
 
   it 'can delete an address that does not have orders' do
-    visit '/profile'
+    visit profile_path
     within("#address-#{@address_1.id}") { click_button 'Delete Address' }
 
-    expect(current_path).to eq('/profile')
+    expect(current_path).to eq(profile_path)
     expect(page).to have_content('Your address has been successfully deleted!')
     expect(page).to_not have_css("#address-#{@address_1.id}")
   end
 
   it 'cannot edit an address that has shipped orders' do
     @address_1.orders.create!(status: 2)
-    visit '/profile'
+    visit profile_path
 
     within "#address-#{@address_1.id}" do
       expect(page).to_not have_link 'Edit Address'

@@ -8,7 +8,7 @@ class UsersController < ApplicationController
     if @user.save
       flash[:success] = ["Congratulations #{@user.name}, you have registered and are now logged in!"]
       session[:user_id] = @user.id
-      redirect_to '/profile'
+      redirect_to profile_path
     else
       flash.now[:error] = @user.errors.full_messages.uniq
       render :new
@@ -37,7 +37,7 @@ class UsersController < ApplicationController
 
     if !@info && user.update(user_params)
       flash[:success] = ['You have succesfully updated your information!']
-      redirect_to '/profile'
+      redirect_to profile_path
     elsif !@info && !user.update(user_params)
       flash.now[:error] = user.errors.full_messages
       render :edit
@@ -50,7 +50,7 @@ class UsersController < ApplicationController
         render :edit
       elsif user.update(user_params)
         flash[:success] = ['You have successfully updated your password!']
-        redirect_to '/profile'
+        redirect_to profile_path
       end
     end
   end

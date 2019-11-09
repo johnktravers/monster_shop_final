@@ -11,10 +11,10 @@ RSpec.describe 'As an admin on a merchant show page' do
     visit "/admin/merchants/#{@meg.id}"
     click_button 'Delete Merchant'
 
-    expect(current_path).to eq('/merchants')
+    expect(current_path).to eq(merchants_path)
     expect(page).to have_content("You have successfully deleted #{@meg.name}")
 
-    visit '/merchants'
+    visit merchants_path
     expect(page).to_not have_content("Meg's Bike Shop")
   end
 

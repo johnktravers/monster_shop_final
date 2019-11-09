@@ -1,7 +1,7 @@
 <% unless @info == 'false' %>
   <h1 class='mt-4 mb-3'>Update Your Information</h1>
 
-  <%= form_tag '/profile', method: :patch do %>
+  <%= form_tag profile_path, method: :patch do %>
     <section class='form-group form-width'>
       <p>
         <%= label_tag :name %>

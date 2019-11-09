@@ -7,7 +7,7 @@ RSpec.describe 'As a default user on my profile page' do
   end
 
   it 'can see all profile data expect password' do
-    visit '/profile'
+    visit profile_path
 
     within '.profile-info' do
       expect(page).to have_content(@user.name)
@@ -33,7 +33,7 @@ RSpec.describe 'As a default user on my profile page' do
   end
 
   it 'can prepopulate form to update profile info' do
-    visit '/profile'
+    visit profile_path
 
     click_link 'Edit Your Info'
 
@@ -51,7 +51,7 @@ RSpec.describe 'As a default user on my profile page' do
 
     click_button 'Update Info'
 
-    expect(current_path).to eq('/profile')
+    expect(current_path).to eq(profile_path)
     expect(page).to have_content('You have succesfully updated your information!')
 
     within '.profile-info' do
@@ -68,7 +68,7 @@ RSpec.describe 'As a default user on my profile page' do
 
     click_button 'Update Info'
 
-    expect(current_path).to eq('/profile')
+    expect(current_path).to eq(profile_path)
     expect(page).to have_content("Name can't be blank")
   end
 
@@ -81,12 +81,12 @@ RSpec.describe 'As a default user on my profile page' do
 
     click_button 'Update Info'
 
-    expect(current_path).to eq('/profile')
+    expect(current_path).to eq(profile_path)
     expect(page).to have_content('Email has already been taken')
   end
 
   it 'can click a button to update password' do
-    visit '/profile'
+    visit profile_path
 
     click_link 'Change Your Password'
 
@@ -97,7 +97,7 @@ RSpec.describe 'As a default user on my profile page' do
 
     click_button 'Update Password'
 
-    expect(current_path).to eq('/profile')
+    expect(current_path).to eq(profile_path)
     expect(page).to have_content('You have successfully updated your password!')
   end
 
@@ -109,7 +109,7 @@ RSpec.describe 'As a default user on my profile page' do
 
     click_button 'Update Password'
 
-    expect(current_path).to eq('/profile')
+    expect(current_path).to eq(profile_path)
 
     expect(page).to have_content('Please fill in both password fields')
 
@@ -125,7 +125,7 @@ RSpec.describe 'As a default user on my profile page' do
 
     click_button 'Update Password'
 
-    expect(current_path).to eq('/profile')
+    expect(current_path).to eq(profile_path)
 
     expect(page).to have_content('Password confirmation doesn\'t match Password')
   end
@@ -137,7 +137,7 @@ RSpec.describe 'As a default user on my profile page' do
     order_1 = Order.create!(address_id: @address_1.id)
     order_1.item_orders.create!(item_id: tire.id, price: tire.price, quantity: 2)
 
-    visit '/profile'
+    visit profile_path
 
     click_link 'Your Orders'
 
@@ -145,13 +145,13 @@ RSpec.describe 'As a default user on my profile page' do
   end
 
   it "does't have link to orders if user doesn't have any orders" do
-    visit '/profile'
+    visit profile_path
 
     expect(page).to_not have_link('Your Orders')
   end
 
   it 'shows a link to edit each address' do
-    visit '/profile'
+    visit profile_path
     within("#address-#{@address_1.id}") { click_link 'Edit Address' }
 
     expect(current_path).to eq("/profile/addresses/#{@address_1.id}/edit")

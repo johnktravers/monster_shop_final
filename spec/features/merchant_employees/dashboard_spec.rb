@@ -13,7 +13,7 @@ RSpec.describe 'As a merchant employee on my merchant dashboard page' do
   end
 
   it 'can see the name and address of the merchant I work for' do
-    visit '/merchant'
+    visit merchant_root_path
 
     within '#merchant-info' do
       expect(page).to have_link(@mike.name)
@@ -26,7 +26,7 @@ RSpec.describe 'As a merchant employee on my merchant dashboard page' do
   end
 
   it 'can see a list of pending orders' do
-    visit '/merchant'
+    visit merchant_root_path
 
     within "#order-#{@order_1.id}" do
       expect(page).to have_link("#{@order_1.id}")

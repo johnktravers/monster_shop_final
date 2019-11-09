@@ -14,7 +14,7 @@ RSpec.describe 'As a merchant admin on an order show page' do
   end
 
   it 'can see customer info and info only for my items' do
-    visit '/merchant'
+    visit merchant_root_path
     within("#order-#{@order_2.id}") { click_link("#{@order_2.id}") }
 
     expect(current_path).to eq("/merchant/orders/#{@order_2.id}")

@@ -37,7 +37,7 @@ module TestHelpers
   end
 
   def login_as_default_user
-    visit '/login'
+    visit login_path
     fill_in :email, with: 'user@gmail.com'
     fill_in :password, with: 'password123'
     click_button 'Login'
@@ -50,7 +50,7 @@ module TestHelpers
   end
 
   def login_as_admin
-    visit '/login'
+    visit login_path
     fill_in :email, with: 'admin@gmail.com'
     fill_in :password, with: 'password123'
     click_button 'Login'
@@ -64,14 +64,14 @@ module TestHelpers
   end
 
   def login_as_mikes_employee
-    visit '/login'
+    visit login_path
     fill_in :email, with: 'mike.employee@gmail.com'
     fill_in :password, with: 'password123'
     click_button 'Login'
   end
 
   def login_as_megs_employee
-    visit '/login'
+    visit login_path
     fill_in :email, with: 'meg.employee@gmail.com'
     fill_in :password, with: 'password123'
     click_button 'Login'
@@ -85,7 +85,7 @@ module TestHelpers
   end
 
   def login_as_merchant_admin
-    visit '/login'
+    visit login_path
     fill_in :email, with: 'mike.admin@gmail.com'
     fill_in :password, with: 'password123'
     click_button 'Login'

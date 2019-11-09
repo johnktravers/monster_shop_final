@@ -25,6 +25,6 @@ class Admin::UserOrdersController < Admin::BaseController
   def update
     order = Order.find(params[:order_id])
     order.update(status: 2)
-    redirect_to '/admin'
+    redirect_to admin_root_path
   end
 end
