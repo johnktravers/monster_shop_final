@@ -13,16 +13,25 @@ class Merchant::OrdersController < Merchant::BaseController
     item_order = ItemOrder.find(params[:item_order_id])
     item_order.update(status: 1)
 
+    reduce_item_inventory(item_order)
+    package_order_if_fulfilled(item_order.order)
+
+    flash[:success] = ["You have successfully fulfilled #{item_order.item.name} for Order ##{item_order.order_id}"]
+    redirect_to "/merchant/orders/#{item_order.order_id}"
+  end
+
+
+  private
+
+  def reduce_item_inventory(item_order)
     item = item_order.item
     item.reduce_inventory(item_order.quantity)
     item.save
+  end
 
-    order = item_order.order
+  def package_order_if_fulfilled(order)
     if order.item_orders.all? { |item_ord| item_ord.fulfilled? }
       order.update(status: 0)
     end
-
-    flash[:success] = ["You have successfully fulfilled #{item.name} for Order ##{item_order.order_id}"]
-    redirect_to "/merchant/orders/#{item_order.order_id}"
   end
 end
